@@ -15,7 +15,7 @@
                                 'red'
         ];
 
-        $http.post('Handler.ashx?action=DashboardGetStaffAchievements').then(function (data) {
+        $http.post(vHostURL + 'Handler.ashx?action=DashboardGetStaffAchievements').then(function (data) {
             $scope.StaffAchievements = data.data.Rows;
             var vTopCount = 0;
             $scope.StaffAchievements.forEach(function (item, index) {
@@ -104,7 +104,7 @@
 
         var arr_data1 = [];
         var arr_data2 = [];
-        $http.post('Handler.ashx?action=DashboardGetSalesStatistics').then(function (data) {
+        $http.post(vHostURL + 'Handler.ashx?action=DashboardGetSalesStatistics').then(function (data) {
             $scope.SalesStatistics = data.data.Rows;
             arr_data1 = [
                [gd($scope.SalesStatistics[7].Year, $scope.SalesStatistics[7].Month, $scope.SalesStatistics[7].Day), $scope.SalesStatistics[0].Count],
@@ -182,7 +182,7 @@
         if ($('#graph_bar').length) {
 
             var vData = [];
-            $http.post('Handler.ashx?action=DashboardGetProfit').then(function (data) {
+            $http.post(vHostURL + 'Handler.ashx?action=DashboardGetProfit').then(function (data) {
                 vData.push({ Key: 'Fare', Value: data.data.Rows[0].Fare });
                 vData.push({ Key: 'Tax', Value: data.data.Rows[0].TAX });
                 vData.push({ Key: 'Cost', Value: data.data.Rows[0].TotalCost });
@@ -206,7 +206,7 @@
     }
 
     $scope.SalesCounts = {};
-    $http.post('Handler.ashx?action=DashboardGetSalesCounts').then(function (data) {
+    $http.post(vHostURL + 'Handler.ashx?action=DashboardGetSalesCounts').then(function (data) {
         $scope.SalesCounts = data.data.Rows[0];
         init_gauge();
     });

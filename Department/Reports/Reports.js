@@ -10,7 +10,7 @@
     $scope.ObjectMainAccounts = {};
     $scope.ObjectMainAccounts.IsDeleted = false;
     $scope.ObjectMainAccounts.AccountTypeID = 47;
-    $http.post('Handler.ashx?action=SelectAccount&PageNumber=1&PageSize=' + vTotalSizeGlobal,
+    $http.post(vHostURL + 'Handler.ashx?action=SelectAccount&PageNumber=1&PageSize=' + vTotalSizeGlobal,
         $scope.ObjectMainAccounts).then(function (data) {
             $scope.MainAccounts = data.data.Rows;
             $scope.MainAccounts.unshift({ID : null ,Name: 'All'});
@@ -24,7 +24,7 @@
         $scope.ObjectAccount.ParentID = MainAccountID;
         $scope.ObjectSearch.SubAcc = null;
         $scope.SubAccounts = [];
-        $http.post('Handler.ashx?action=SelectAccount&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectAccount).then(
+        $http.post(vHostURL + 'Handler.ashx?action=SelectAccount&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectAccount).then(
             function (data) {
                 $scope.SubAccounts = data.data.Rows;
                 $scope.SubAccounts.unshift({ ID: null, Name: 'All' });
@@ -56,7 +56,7 @@
         {
             $scope.ObjectAccountReport = {};
             $scope.ObjectAccountReport.ID = $scope.ObjectSearch.AccountID;
-            $http.post('Handler.ashx?action=SelectAccount&PageNumber=1&PageSize=1', $scope.ObjectAccountReport).then(
+            $http.post(vHostURL + 'Handler.ashx?action=SelectAccount&PageNumber=1&PageSize=1', $scope.ObjectAccountReport).then(
             function (data) {
                 $scope.Account = data.data.Rows[0].Name;
             });
@@ -64,7 +64,7 @@
         else
         $scope.Account = 'All Accounts';
 
-        $http.post('Handler.ashx?action=SelectMovement', $scope.ObjectSearch).then(
+        $http.post(vHostURL + 'Handler.ashx?action=SelectMovement', $scope.ObjectSearch).then(
             function (data) {
                 $scope.List = [];
                 if (data.data.Rows.length != 0) {
@@ -78,7 +78,7 @@
     
                 }
                 if ($scope.ObjectSearch.AccountID != null) {
-                    $http.post('Handler.ashx?action=SelectAccountDC',$scope.ObjectSearch).then(
+                    $http.post(vHostURL + 'Handler.ashx?action=SelectAccountDC',$scope.ObjectSearch).then(
                         function (data) {
                             $scope.Credit = data.data.Rows[0].Credit;
                             $scope.Debit = data.data.Rows[0].Debit;
@@ -119,12 +119,12 @@ app.controller("AirlineReportCtrl", function ($scope, $http) {
 
     $scope.ObjectStaffList = {};
     $scope.ObjectStaffList.IsDeleted = false;
-    $http.post('Handler.ashx?action=SelectStaff&PageNumber=1&PageSize=100', $scope.ObjectStaffList).then(function (data) {
+    $http.post(vHostURL + 'Handler.ashx?action=SelectStaff&PageNumber=1&PageSize=100', $scope.ObjectStaffList).then(function (data) {
         $scope.StaffList = data.data.Rows;
         $scope.StaffList.unshift({ ID: null, Name: 'All' });
         $scope.ObjectAirLines = {};
         $scope.ObjectAirLines.IsDeleted = false;
-        $http.post('Handler.ashx?action=SelectAirline&PageNumber=1&PageSize=1000', $scope.ObjectAirLines).then(function (data) {
+        $http.post(vHostURL + 'Handler.ashx?action=SelectAirline&PageNumber=1&PageSize=1000', $scope.ObjectAirLines).then(function (data) {
             $scope.AirlinesList = data.data.Rows;
             $scope.AirlinesList.unshift({ ID: null, Name: 'All' });
         });
@@ -147,7 +147,7 @@ app.controller("AirlineReportCtrl", function ($scope, $http) {
             $scope.ObjectSearch.AirlineID = $scope.ObjectSearch.Airline.ID;
 
         }
-        $http.post('Handler.ashx?action=SelectSalesForAirlineReport', $scope.ObjectSearch).then(
+        $http.post(vHostURL + 'Handler.ashx?action=SelectSalesForAirlineReport', $scope.ObjectSearch).then(
             function (data) {
                 $scope.List = [];
                 if (data.data.Rows.length != 0) {
@@ -196,7 +196,7 @@ app.controller("TotalAirlineReportCtrl", function ($scope, $http) {
         $scope.TotalCost = 0;
         $scope.TotalSalesAmount = 0;
         $scope.TotalProfit = 0;
-        $http.post('Handler.ashx?action=SelectSalesForTotalAirlineReport', $scope.ObjectSearch).then(
+        $http.post(vHostURL + 'Handler.ashx?action=SelectSalesForTotalAirlineReport', $scope.ObjectSearch).then(
             function (data) {
                 $scope.List = [];
                 if (data.data.Rows.length != 0) {
@@ -241,7 +241,7 @@ app.controller("ExpensesReportCtrl", function ($scope, $http) {
         $scope.TotalCredit = 0;
         $scope.TotalProfit = 0;
 
-        $http.post('Handler.ashx?action=SelectSalesForExpesesReport', $scope.ObjectSearch).then(
+        $http.post(vHostURL + 'Handler.ashx?action=SelectSalesForExpesesReport', $scope.ObjectSearch).then(
             function (data) {
                 $scope.List = [];
                 if (data.data.Rows.length != 0) {
@@ -280,7 +280,7 @@ app.controller("IncomeReportCtrl", function ($scope, $http) {
         $scope.TotalCredit = 0;
         $scope.TotalProfit = 0;
 
-        $http.post('Handler.ashx?action=SelectSalesForIncomeReport', $scope.ObjectSearch).then(
+        $http.post(vHostURL + 'Handler.ashx?action=SelectSalesForIncomeReport', $scope.ObjectSearch).then(
             function (data) {
                 $scope.List = [];
                 if (data.data.Rows.length != 0) {
@@ -320,7 +320,7 @@ app.controller("ProfitReportCtrl", function ($scope, $http, $filter) {
 
     $scope.Search = function () {
 
-        $http.post('Handler.ashx?action=SelectSalesForProfitReport', $scope.ObjectSearch).then(
+        $http.post(vHostURL + 'Handler.ashx?action=SelectSalesForProfitReport', $scope.ObjectSearch).then(
             function (data) {
                 $scope.Reset();
                 if (data.data.Rows.length != 0) {
@@ -389,12 +389,12 @@ app.controller("DailySalesReportCtrl", function ($scope, $http, $filter) {
 
     $scope.ObjectStaffList = {};
     $scope.ObjectStaffList.IsDeleted = false;
-    $http.post('Handler.ashx?action=SelectStaff&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectStaffList).then(function (data) {
+    $http.post(vHostURL + 'Handler.ashx?action=SelectStaff&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectStaffList).then(function (data) {
         $scope.StaffList = data.data.Rows;
         $scope.StaffList.unshift({ ID: null, Name: 'All' });
         $scope.ObjectAirLines = {};
         $scope.ObjectAirLines.IsDeleted = false;
-        $http.post('Handler.ashx?action=SelectAirline&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectAirLines).then(function (data) {
+        $http.post(vHostURL + 'Handler.ashx?action=SelectAirline&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectAirLines).then(function (data) {
             $scope.AirlinesList = data.data.Rows;
             $scope.AirlinesList.unshift({ ID: null, Name: 'All' });
             $scope.ObjectSalesType = {};
@@ -402,7 +402,7 @@ app.controller("DailySalesReportCtrl", function ($scope, $http, $filter) {
             $scope.ObjectSalesType.LookupTypeID = 2;
             //this parmter to exclude refunded types
             $scope.ObjectSalesType.Note = 'Note';
-            $http.post('Handler.ashx?action=SelectLookup&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectSalesType).then(function (data) {
+            $http.post(vHostURL + 'Handler.ashx?action=SelectLookup&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectSalesType).then(function (data) {
                 $scope.SalesTypeList = data.data.Rows;
                 $scope.SalesTypeList.unshift({ ID: null, Title: 'All' });
             });
@@ -426,7 +426,7 @@ app.controller("DailySalesReportCtrl", function ($scope, $http, $filter) {
 
         }
 
-        $http.post('Handler.ashx?action=SelectSalesForDailySalesReport', $scope.ObjectSearch).then(
+        $http.post(vHostURL + 'Handler.ashx?action=SelectSalesForDailySalesReport', $scope.ObjectSearch).then(
             function (data) {
                 $scope.List = [];
                 if (data.data.Rows.length != 0) {
@@ -462,7 +462,7 @@ app.controller("StaffTotalSalesReportCtrl", function ($scope, $http) {
 
     $scope.ObjectStaffList = {};
     $scope.ObjectStaffList.IsDeleted = false;
-    $http.post('Handler.ashx?action=SelectStaff&PageNumber=1&PageSize=100', $scope.ObjectStaffList).then(function (data) {
+    $http.post(vHostURL + 'Handler.ashx?action=SelectStaff&PageNumber=1&PageSize=100', $scope.ObjectStaffList).then(function (data) {
         $scope.StaffList = data.data.Rows;
         $scope.StaffList.unshift({ ID: null, Name: 'All' });
     });
@@ -474,7 +474,7 @@ app.controller("StaffTotalSalesReportCtrl", function ($scope, $http) {
             $scope.ObjectSearch.CreatedStaffID = $scope.ObjectSearch.Staff.ID;
 
         }
-        $http.post('Handler.ashx?action=SelectSalesForStaffTotalSalesReport', $scope.ObjectSearch).then(
+        $http.post(vHostURL + 'Handler.ashx?action=SelectSalesForStaffTotalSalesReport', $scope.ObjectSearch).then(
             function (data) {
                 $scope.List = [];
                 if (data.data.Rows.length != 0) {
@@ -505,7 +505,7 @@ app.controller("TrailBalanceReportCtrl", function ($scope, $http) {
     $scope.List = [];
 
     $scope.Search = function () {
-        $http.post('Handler.ashx?action=SelectAccountsForTrialBalanceReport', $scope.ObjectSearch).then(
+        $http.post(vHostURL + 'Handler.ashx?action=SelectAccountsForTrialBalanceReport', $scope.ObjectSearch).then(
             function (data) {
                 $scope.List = [];
                 if (data.data.Rows.length != 0) {
@@ -546,7 +546,7 @@ app.controller("SalesPerBNRReportCtrl", function ($scope, $http) {
     $scope.ObjectSalesType.LookupTypeID = 2;
     //this parmter to exclude refunded types
     $scope.ObjectSalesType.Note = 'Note';
-    $http.post('Handler.ashx?action=SelectLookup&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectSalesType).then(function (data) {
+    $http.post(vHostURL + 'Handler.ashx?action=SelectLookup&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectSalesType).then(function (data) {
         $scope.SalesTypeList = data.data.Rows;
         $scope.SalesTypeList.unshift({ ID: null, Title: 'All' });
     });
@@ -567,7 +567,7 @@ app.controller("SalesPerBNRReportCtrl", function ($scope, $http) {
             $scope.ObjectSearch.SalesTypeID = $scope.ObjectSearch.SalesType.ID;
 
         }
-        $http.post('Handler.ashx?action=SelectSalesPerPNRReport', $scope.ObjectSearch).then(
+        $http.post(vHostURL + 'Handler.ashx?action=SelectSalesPerPNRReport', $scope.ObjectSearch).then(
             function (data) {
                 $scope.List = [];
                 if (data.data.Rows.length != 0) {
@@ -608,7 +608,7 @@ app.controller("SalesReportCtrl", function ($scope, $http, $filter) {
     $scope.ObjectMainAccounts = {};
     $scope.ObjectMainAccounts.IsDeleted = false;
     $scope.ObjectMainAccounts.AccountTypeID = 47;
-    $http.post('Handler.ashx?action=SelectAccount&PageNumber=1&PageSize=' + vTotalSizeGlobal,
+    $http.post(vHostURL + 'Handler.ashx?action=SelectAccount&PageNumber=1&PageSize=' + vTotalSizeGlobal,
         $scope.ObjectMainAccounts).then(function (data) {
             $scope.AllMainAcc = data.data.Rows;
             $scope.AllMainAcc.forEach(function (item) {
@@ -628,7 +628,7 @@ app.controller("SalesReportCtrl", function ($scope, $http, $filter) {
         $scope.ObjectSearch.SubAcc = null;
         $scope.ObjectSearch.SubAccountID = null;
         $scope.SubAccounts = [];
-        $http.post('Handler.ashx?action=SelectAccount&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectAccount).then(
+        $http.post(vHostURL + 'Handler.ashx?action=SelectAccount&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectAccount).then(
             function (data) {
                 $scope.SubAccounts = data.data.Rows;
                 $scope.SubAccounts.unshift({ ID: null, Name: 'All' });
@@ -638,12 +638,12 @@ app.controller("SalesReportCtrl", function ($scope, $http, $filter) {
 
     $scope.ObjectStaffList = {};
     $scope.ObjectStaffList.IsDeleted = false;
-    $http.post('Handler.ashx?action=SelectStaff&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectStaffList).then(function (data) {
+    $http.post(vHostURL + 'Handler.ashx?action=SelectStaff&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectStaffList).then(function (data) {
         $scope.StaffList = data.data.Rows;
         $scope.StaffList.unshift({ ID: null, Name: 'All' });
         $scope.ObjectAirLines = {};
         $scope.ObjectAirLines.IsDeleted = false;
-        $http.post('Handler.ashx?action=SelectAirline&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectAirLines).then(function (data) {
+        $http.post(vHostURL + 'Handler.ashx?action=SelectAirline&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectAirLines).then(function (data) {
             $scope.AirlinesList = data.data.Rows;
             $scope.AirlinesList.unshift({ ID: null, Name: 'All' });
             $scope.ObjectSalesType = {};
@@ -651,7 +651,7 @@ app.controller("SalesReportCtrl", function ($scope, $http, $filter) {
             $scope.ObjectSalesType.LookupTypeID = 2;
             //this parmter to exclude refunded types
             $scope.ObjectSalesType.Note = 'Note';
-            $http.post('Handler.ashx?action=SelectLookup&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectSalesType).then(function (data) {
+            $http.post(vHostURL + 'Handler.ashx?action=SelectLookup&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectSalesType).then(function (data) {
                 $scope.SalesTypeList = data.data.Rows;
                 $scope.SalesTypeList.unshift({ ID: null, Title: 'All' });
             });
@@ -689,7 +689,7 @@ app.controller("SalesReportCtrl", function ($scope, $http, $filter) {
                 $scope.colspanValue = 6;
         }
 
-        $http.post('Handler.ashx?action=SelectSalesForSalesReport', $scope.ObjectSearch).then(
+        $http.post(vHostURL + 'Handler.ashx?action=SelectSalesForSalesReport', $scope.ObjectSearch).then(
             function (data) {
                 $scope.List = [];
                 if (data.data.Rows.length != 0) {

@@ -1,6 +1,7 @@
 ﻿var app = angular.module("myApp", ["ngRoute", "ui.bootstrap", "ngSanitize", "ui.select", "angular.filter"]);
 
 //Constant
+var vHostURL = 'http://5.79.102.57:8085/';
 var vPageSizeGlobal = 5;
 var vPageSizeSales = 20;
 var vTotalSizeGlobal = 1000;
@@ -69,7 +70,7 @@ app.service('CommonFunctions', function ($http) {
         ObjectLog.StaffID = JSON.parse(localStorage.getItem('LoggedIn')).ID;
         ObjectLog.Type = vType;
         ObjectLog.Details = vDetails;
-        $http.post('Handler.ashx?action=InsertLog', ObjectLog);
+        $http.post(vHostURL + 'Handler.ashx?action=InsertLog', ObjectLog);
     };
 });
 
@@ -186,9 +187,9 @@ app.controller("HomeCtrl", function ($scope, $rootScope, $location, $http, $rout
     $rootScope.NotificationsList = [];
     $scope.NotificationObject = {};
     $scope.NotificationObject.IsSeen = 0;
-    $http.post('Handler.ashx?action=SelectNotification', $scope.NotificationObject).then(function (data) {
+    $http.post(vHostURL + 'Handler.ashx?action=SelectNotification', $scope.NotificationObject).then(function (data) {
         $rootScope.NotificationsList = data.data.Rows;
-        $http.post('Handler.ashx?action=CountNotification', $scope.NotificationObject).then(function (data) {
+        $http.post(vHostURL + 'Handler.ashx?action=CountNotification', $scope.NotificationObject).then(function (data) {
             $rootScope.Notifications = data.data.Rows[0].NotificationsCount;
             $rootScope.NotificationsSalesCount = data.data.Rows[0].NotificationsSalesCount;
             $rootScope.NotificationsJournalCount = data.data.Rows[0].NotificationsJournalCount;
@@ -201,9 +202,9 @@ app.controller("HomeCtrl", function ($scope, $rootScope, $location, $http, $rout
         $rootScope.NotificationsList = [];
         $scope.NotificationObject = {};
         $scope.NotificationObject.IsSeen = 0;
-        $http.post('Handler.ashx?action=SelectNotification', $scope.NotificationObject).then(function (data) {
+        $http.post(vHostURL + 'Handler.ashx?action=SelectNotification', $scope.NotificationObject).then(function (data) {
             $rootScope.NotificationsList = data.data.Rows;
-            $http.post('Handler.ashx?action=CountNotification', $scope.NotificationObject).then(function (data) {
+            $http.post(vHostURL + 'Handler.ashx?action=CountNotification', $scope.NotificationObject).then(function (data) {
                 $rootScope.NotificationsSalesCount = data.data.Rows[0].NotificationsSalesCount;
                 $rootScope.NotificationsJournalCount = data.data.Rows[0].NotificationsJournalCount;
             });

@@ -37,7 +37,7 @@
     //Intial
     $scope.ObjectStaffList = {};
     $scope.ObjectStaffList.IsDeleted = false;
-    $http.post('Handler.ashx?action=SelectStaff&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectStaffList).then(function (data) {
+    $http.post(vHostURL + 'Handler.ashx?action=SelectStaff&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectStaffList).then(function (data) {
         $scope.StaffList = data.data.Rows;
 
         $scope.ObjectSalesType = {};
@@ -45,28 +45,28 @@
         $scope.ObjectSalesType.LookupTypeID = 2;
         //this parmter to exclude refunded types
         $scope.ObjectSalesType.Note = 'Note';
-        $http.post('Handler.ashx?action=SelectLookup&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectSalesType).then(function (data) {
+        $http.post(vHostURL + 'Handler.ashx?action=SelectLookup&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectSalesType).then(function (data) {
             $scope.SalesTypeList = data.data.Rows;
 
             $scope.ObjectPaymentMethods = {};
             $scope.ObjectPaymentMethods.IsDeleted = false;
             $scope.ObjectPaymentMethods.LookupTypeID = 3;
-            $http.post('Handler.ashx?action=SelectLookup&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectPaymentMethods).then(function (data) {
+            $http.post(vHostURL + 'Handler.ashx?action=SelectLookup&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectPaymentMethods).then(function (data) {
                 $scope.PaymentMethodsList = data.data.Rows;
 
                 $scope.ObjectAirLines = {};
                 $scope.ObjectAirLines.IsDeleted = false;
-                $http.post('Handler.ashx?action=SelectAirline&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectAirLines).then(function (data) {
+                $http.post(vHostURL + 'Handler.ashx?action=SelectAirline&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectAirLines).then(function (data) {
                     $scope.AirlinesList = data.data.Rows;
                     if (localStorage.getItem('SaleID') != null) {
                         $scope.PageTitle = 'Sale Details';
                         $scope.ObjectSales.ID = localStorage.getItem('SaleID');
 
-                        $http.post('Handler.ashx?action=SelectSales&PageNumber=1&PageSize=1&BranchID=' + $scope.BranchID, $scope.ObjectSales).then(function (data) {
+                        $http.post(vHostURL + 'Handler.ashx?action=SelectSales&PageNumber=1&PageSize=1&BranchID=' + $scope.BranchID, $scope.ObjectSales).then(function (data) {
                             if (data.data.Rows[0].ParentID != null) {
                                 $scope.ObjectSales = {}
                                 $scope.ObjectSales.ID = data.data.Rows[0].ParentID
-                                $http.post('Handler.ashx?action=SelectSales&PageNumber=1&PageSize=1&BranchID=' + $scope.BranchID, $scope.ObjectSales).then(function (data) {
+                                $http.post(vHostURL + 'Handler.ashx?action=SelectSales&PageNumber=1&PageSize=1&BranchID=' + $scope.BranchID, $scope.ObjectSales).then(function (data) {
                                     $scope.totalAmountBalance = false;
                                     $scope.Object.Fare = data.data.Rows[0].Fare;
                                     $scope.Object.Tax = data.data.Rows[0].Tax;
@@ -127,7 +127,7 @@
                                 $scope.ObjectSalesType.IsDeleted = false;
                                 $scope.ObjectSalesType.LookupTypeID = 2;
                                 $scope.ObjectSalesType.Note = 'Note';
-                                $http.post('Handler.ashx?action=SelectLookup&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectSalesType).then(function (data) {
+                                $http.post(vHostURL + 'Handler.ashx?action=SelectLookup&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectSalesType).then(function (data) {
                                     data.data.Rows.forEach(function (item) {
                                         if (item.ID == 25 || item.ID == 27 || item.ID == 49)
                                             $scope.SalesTypeListTransfer.push(item);
@@ -138,7 +138,7 @@
                                 $scope.UpdatedObject = null;
                                 $scope.UpdatedObjectSearch = {};
                                 $scope.UpdatedObjectSearch.ID = $scope.Object.HistoryID;
-                                $http.post('Handler.ashx?action=SelectSalesHistory&PageNumber=1&PageSize=1&BranchID=' + $scope.BranchID, $scope.UpdatedObjectSearch).then(function (data) {
+                                $http.post(vHostURL + 'Handler.ashx?action=SelectSalesHistory&PageNumber=1&PageSize=1&BranchID=' + $scope.BranchID, $scope.UpdatedObjectSearch).then(function (data) {
                                     $scope.UpdatedObject = data.data.Rows[0];
                                     $scope.UpdatedObject.CreationDate = $scope.UpdatedObject.CreationDate.toString('yyyy-MM-dd');
                                     if ($scope.UpdatedObject != null && ($scope.UpdatedObject.PaymentMethodID == 18 || $scope.UpdatedObject.PaymentMethodID == 20 || $scope.UpdatedObject.PaymentMethodID == 24)) {
@@ -158,7 +158,7 @@
         $scope.ObjectPaymentMethodAcc = {};
         $scope.ObjectPaymentMethodAcc.PaymentMethodID = 21;
 
-        $http.post('Handler.ashx?action=SelectSalesMappingAccountPaymentMethod', $scope.ObjectPaymentMethodAcc).then(function (data) {
+        $http.post(vHostURL + 'Handler.ashx?action=SelectSalesMappingAccountPaymentMethod', $scope.ObjectPaymentMethodAcc).then(function (data) {
             $scope.ObjectPaymentMethodAcc = {};
             $scope.ObjectPaymentMethodAcc = data.data.Rows[0];
             $scope.AdvanceAccountID = $scope.ObjectPaymentMethodAcc.AccountID;
@@ -168,7 +168,7 @@
             $scope.ObjectTotalAdvanceccount.IsDeleted = false;
             $scope.ObjectTotalAdvanceccount.ID = $scope.AdvanceAccountID;
 
-            $http.post('Handler.ashx?action=SelectAccount&PageNumber=1&PageSize=100', $scope.ObjectTotalAdvanceccount).then(function (data) {
+            $http.post(vHostURL + 'Handler.ashx?action=SelectAccount&PageNumber=1&PageSize=100', $scope.ObjectTotalAdvanceccount).then(function (data) {
                 $scope.ObjectTotalAdvanceccount = {};
                 $scope.ObjectTotalAdvanceccount = data.data.Rows[0];
 
@@ -201,7 +201,7 @@
         $scope.ObjectSubAccounts = {};
         $scope.ObjectSubAccounts.IsDeleted = false;
         $scope.ObjectSubAccounts.ParentID = parseInt(MainAccountID);
-        $http.post('Handler.ashx?action=SelectAccount&PageNumber=1&PageSize=100', $scope.ObjectSubAccounts).then(function (data) {
+        $http.post(vHostURL + 'Handler.ashx?action=SelectAccount&PageNumber=1&PageSize=100', $scope.ObjectSubAccounts).then(function (data) {
             $scope.SubAccountsList = data.data.Rows;
             var targetSubAcc = $scope.SubAccountsList.filter(function (item) {
                 return item.ID === $scope.Object.SubAccountID;
@@ -245,7 +245,7 @@
         $scope.ObjectRecievableMainAccounts.IsDeleted = false;
         $scope.ObjectRecievableMainAccounts.AccountNumber = '1131';
 
-        $http.post('Handler.ashx?action=SelectAccount&PageNumber=1&PageSize=100', $scope.ObjectRecievableMainAccounts).then(function (data) {
+        $http.post(vHostURL + 'Handler.ashx?action=SelectAccount&PageNumber=1&PageSize=100', $scope.ObjectRecievableMainAccounts).then(function (data) {
 
             $scope.RecievableMainAccountList = data.data.Rows;
             if ($scope.Object.RecievableMainAccountID != null) {
@@ -267,7 +267,7 @@
         $scope.ObjectRecievableSubAccounts = {};
         $scope.ObjectRecievableSubAccounts.IsDeleted = false;
         $scope.ObjectRecievableSubAccounts.ParentID = recievableMainAccountID;
-        $http.post('Handler.ashx?action=SelectAccount&PageNumber=1&PageSize=100', $scope.ObjectRecievableSubAccounts).then(function (data) {
+        $http.post(vHostURL + 'Handler.ashx?action=SelectAccount&PageNumber=1&PageSize=100', $scope.ObjectRecievableSubAccounts).then(function (data) {
             $scope.RecievableSubAccountList = data.data.Rows;
             if ($scope.Object.CreditAccountID != null) {
                 var subindex = $scope.RecievableSubAccountList.findIndex(x => x.ID == $scope.Object.CreditAccountID);
@@ -282,7 +282,7 @@
         $scope.ObjectVisaAndCardAccount.IsDeleted = false;
         $scope.ObjectVisaAndCardAccount.AccountNumber = '112102';
 
-        $http.post('Handler.ashx?action=SelectAccount&PageNumber=1&PageSize=100', $scope.ObjectVisaAndCardAccount).then(function (data) {
+        $http.post(vHostURL + 'Handler.ashx?action=SelectAccount&PageNumber=1&PageSize=100', $scope.ObjectVisaAndCardAccount).then(function (data) {
             $scope.BankAccountsList = data.data.Rows;
             if (forUpdatedObject)
                 $scope.UpdatedObject.BankAccountID = $scope.BankAccountsList[0].ID;
@@ -461,7 +461,7 @@
                 $scope.Object.SalesStatusID = 95;
                 $scope.Object.CreationDate = $scope.Object.JournalDate.toString('yyyy-MM-dd');
                 $scope.Object.HistoryCreatedStaffID = JSON.parse(localStorage.getItem('LoggedIn')).ID;
-                $http.post('Handler.ashx?action=InsertSalesHistory', $scope.Object).then(function (data) {
+                $http.post(vHostURL + 'Handler.ashx?action=InsertSalesHistory', $scope.Object).then(function (data) {
                     CommonFunctions.InsertLog(9, $scope.Object.ID, 2, 'Pending Edit');
                     swal("Updated!", "Waiting approval from administrator!", "success");
                     localStorage.removeItem('SaleID');
@@ -495,7 +495,7 @@
                 if ($scope.Object.RecievableMainAccount != undefined && $scope.Object.RecievableMainAccount != null) {
                     $scope.Object.RecievableMainAccountID = $scope.Object.RecievableMainAccount.ID;
                 }
-                $http.post('Handler.ashx?action=InsertSales', $scope.Object).then(function (data) {
+                $http.post(vHostURL + 'Handler.ashx?action=InsertSales', $scope.Object).then(function (data) {
                     var existingTicket = data.data.TicketExist;
                     if (existingTicket == undefined || existingTicket == null) {
                         swal("Done!", "Sale Created Successfully!", "success");
@@ -546,7 +546,7 @@
         $scope.ObjectSelectSale = {};
         $scope.ObjectSelectSale.IsDeleted = false;
         $scope.ObjectSelectSale.ID = ID;
-        $http.post('Handler.ashx?action=SelectSales&PageNumber=1&PageSize=100&BranchID=' + $scope.BranchID, $scope.ObjectSelectSale).then(function (data) {
+        $http.post(vHostURL + 'Handler.ashx?action=SelectSales&PageNumber=1&PageSize=100&BranchID=' + $scope.BranchID, $scope.ObjectSelectSale).then(function (data) {
             $scope.SlesObject = data.data.Rows[0];
             $('#VoidModel').modal("show");
         });
@@ -555,7 +555,7 @@
         $scope.SlesObject.SalesAmount = $scope.NewObject.SalesAmount;
         $scope.SlesObject.SalesStatusID = 87; //Pending Void 
         $scope.SlesObject.HistoryCreatedStaffID = JSON.parse(localStorage.getItem('LoggedIn')).ID;
-        $http.post('Handler.ashx?action=InsertSalesHistory', $scope.SlesObject).then(function (data) {
+        $http.post(vHostURL + 'Handler.ashx?action=InsertSalesHistory', $scope.SlesObject).then(function (data) {
             CommonFunctions.InsertLog(9, $scope.SlesObject.ID, 0, 'Pending Void ');
             swal("Voided!", "Waiting approval from administrator", "success");
             $('#VoidModel').modal("hide");
@@ -566,7 +566,7 @@
         $scope.ObjectSelectSale = {};
         $scope.ObjectSelectSale.IsDeleted = false;
         $scope.ObjectSelectSale.ID = ID;
-        $http.post('Handler.ashx?action=SelectSales&PageNumber=1&PageSize=100&BranchID=' + $scope.BranchID, $scope.ObjectSelectSale).then(function (data) {
+        $http.post(vHostURL + 'Handler.ashx?action=SelectSales&PageNumber=1&PageSize=100&BranchID=' + $scope.BranchID, $scope.ObjectSelectSale).then(function (data) {
             $scope.SlesObject = data.data.Rows[0];
             $('#RefundModel').modal("show");
         });
@@ -576,7 +576,7 @@
         $scope.SlesObject.SalesStatusID = 7; // refunded
         $scope.SlesObject.RefAmountFromProvider = $scope.Object.RefSalesAmount;
         $scope.SlesObject.RefDescription = $scope.Object.RefDescription;
-        $http.post('Handler.ashx?action=InsertSalesAfterRefund', $scope.SlesObject).then(function (data) {
+        $http.post(vHostURL + 'Handler.ashx?action=InsertSalesAfterRefund', $scope.SlesObject).then(function (data) {
             CommonFunctions.InsertLog(9, $scope.SlesObject.ID, 0, 'Refund');
             swal("Refunded!", "Please complete refunding process from Refund Sales!", "success");
             $('#RefundModel').modal("hide");
@@ -595,7 +595,7 @@
             if (willDelete) {
                 Object.SalesStatusID = 94;
                 Object.HistoryCreatedStaffID = JSON.parse(localStorage.getItem('LoggedIn')).ID;
-                $http.post('Handler.ashx?action=InsertSalesHistory', Object).then(function (data) {
+                $http.post(vHostURL + 'Handler.ashx?action=InsertSalesHistory', Object).then(function (data) {
                     CommonFunctions.InsertLog(9, Object.ID, 2, 'Pending Delete');
                     swal("Done! Your select has been deleted", {
                         icon: "success",
@@ -619,7 +619,7 @@
 
         $scope.ObjectSalesPrint.SalesStatusID = localStorage.getItem('CurrentSalesStatus');
         $scope.ObjectSalesPrint.InvoiceNumberPNR = obj.InvoiceNumberPNR;
-        $http.post('Handler.ashx?action=SelectSales&PageNumber=' + $scope.CurrentPage + '&PageSize=' + vPageSizeSales + '&BranchID=' + $scope.BranchID, $scope.ObjectSalesPrint).then(function (data) {
+        $http.post(vHostURL + 'Handler.ashx?action=SelectSales&PageNumber=' + $scope.CurrentPage + '&PageSize=' + vPageSizeSales + '&BranchID=' + $scope.BranchID, $scope.ObjectSalesPrint).then(function (data) {
             $scope.PrintList = [];
             if (data.data.Rows.length != 0) {
                 $scope.PrintList = data.data.Rows;
@@ -658,7 +658,7 @@
         .then(function (Approve) {
             if (Approve) {
                 UpdatedObject.ApproveStatusID = 33;
-                $http.post('Handler.ashx?action=UpdateSalesHistory', UpdatedObject).then(function (data) {
+                $http.post(vHostURL + 'Handler.ashx?action=UpdateSalesHistory', UpdatedObject).then(function (data) {
                     swal("Approved!", {
                         icon: "success",
                     });
@@ -688,7 +688,7 @@
             if (reason) {
                 UpdatedObject.ApproveStatusID = 34;
                 UpdatedObject.RejectionReason = reason;
-                $http.post('Handler.ashx?action=UpdateSalesHistory', UpdatedObject).then(function (data) {
+                $http.post(vHostURL + 'Handler.ashx?action=UpdateSalesHistory', UpdatedObject).then(function (data) {
                     swal("Rejected!", {
                         icon: "success"
                     });
@@ -716,7 +716,7 @@
                 $scope.Object.SalesTypeID = $scope.TransferObject.SalesType.ID;
             $scope.Object.AccountantStaffID = JSON.parse(localStorage.getItem('LoggedIn')).ID;
             $scope.Object.BankAccountID = 5;
-            $http.post('Handler.ashx?action=TransferSales', $scope.Object).then(function (data) {
+            $http.post(vHostURL + 'Handler.ashx?action=TransferSales', $scope.Object).then(function (data) {
                 CommonFunctions.InsertLog(4, $scope.Object.ID, 0, 'Transfer Sales');
                 localStorage.setItem('CurrentSalesStatus', 5);
                 $location.path("/SalesListing");
@@ -744,7 +744,7 @@
             })[0];
             var MainAccount = targetItem.Note.split("-");
             $scope.ObjectSubAccounts.ParentID = parseInt(MainAccount[0]);
-            $http.post('Handler.ashx?action=SelectAccount&PageNumber=1&PageSize=100', $scope.ObjectSubAccounts).then(function (data) {
+            $http.post(vHostURL + 'Handler.ashx?action=SelectAccount&PageNumber=1&PageSize=100', $scope.ObjectSubAccounts).then(function (data) {
                 $scope.SubAccountsList = [];
                 $scope.SubAccountsList = data.data.Rows;
             });
@@ -788,14 +788,14 @@ app.controller("SalesCtrl", function ($scope, $http, $location, $filter, $route,
 
     $scope.ObjectStaffList = {};
     $scope.ObjectStaffList.IsDeleted = false;
-    $http.post('Handler.ashx?action=SelectStaff&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectStaffList).then(function (data) {
+    $http.post(vHostURL + 'Handler.ashx?action=SelectStaff&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectStaffList).then(function (data) {
         $scope.StaffList = data.data.Rows;
 
         $scope.ObjectSalesType = {};
         $scope.ObjectSalesType.IsDeleted = false;
         $scope.ObjectSalesType.LookupTypeID = 2;
         $scope.ObjectSalesType.Note = 'Note';
-        $http.post('Handler.ashx?action=SelectLookup&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectSalesType).then(function (data) {
+        $http.post(vHostURL + 'Handler.ashx?action=SelectLookup&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectSalesType).then(function (data) {
             data.data.Rows.forEach(function (item) {
                 if (item.ID == 25 || item.ID == 27 || item.ID == 49)
                     $scope.SalesTypeList.push(item);
@@ -815,7 +815,7 @@ app.controller("SalesCtrl", function ($scope, $http, $location, $filter, $route,
             })[0];
             var MainAccount = targetItem.Note.split("-");
             $scope.ObjectSubAccounts.ParentID = parseInt(MainAccount[0]);
-            $http.post('Handler.ashx?action=SelectAccount&PageNumber=1&PageSize=100', $scope.ObjectSubAccounts).then(function (data) {
+            $http.post(vHostURL + 'Handler.ashx?action=SelectAccount&PageNumber=1&PageSize=100', $scope.ObjectSubAccounts).then(function (data) {
                 $scope.SubAccountsList = [];
                 $scope.SubAccountsList = data.data.Rows;
             });
@@ -831,7 +831,7 @@ app.controller("SalesCtrl", function ($scope, $http, $location, $filter, $route,
 
         if (localStorage.getItem('CurrentSalesStatus') == 0) {
             $scope.ObjectSales.ApproveStatusID = 32;
-            $http.post('Handler.ashx?action=SelectSalesHistory&PageNumber=' + $scope.CurrentPage + '&PageSize=' + vPageSizeSales + '&BranchID=' + $scope.BranchID, $scope.ObjectSales).then(function (data) {
+            $http.post(vHostURL + 'Handler.ashx?action=SelectSalesHistory&PageNumber=' + $scope.CurrentPage + '&PageSize=' + vPageSizeSales + '&BranchID=' + $scope.BranchID, $scope.ObjectSales).then(function (data) {
                 $scope.List = [];
                 if (data.data.Rows.length != 0) {
                     $scope.List = data.data.Rows;
@@ -843,7 +843,7 @@ app.controller("SalesCtrl", function ($scope, $http, $location, $filter, $route,
         else if (localStorage.getItem('CurrentSalesStatus') == 1) {
             $scope.ObjectSales.HistoryCreatedStaffID = JSON.parse(localStorage.getItem('LoggedIn')).ID;
             $scope.ObjectSales.ApproveStatusID = 34;
-            $http.post('Handler.ashx?action=SelectSalesHistory&PageNumber=' + $scope.CurrentPage + '&PageSize=' + vPageSizeSales + '&BranchID=' + $scope.BranchID, $scope.ObjectSales).then(function (data) {
+            $http.post(vHostURL + 'Handler.ashx?action=SelectSalesHistory&PageNumber=' + $scope.CurrentPage + '&PageSize=' + vPageSizeSales + '&BranchID=' + $scope.BranchID, $scope.ObjectSales).then(function (data) {
                 $scope.List = [];
                 if (data.data.Rows.length != 0) {
                     $scope.List = data.data.Rows;
@@ -861,7 +861,7 @@ app.controller("SalesCtrl", function ($scope, $http, $location, $filter, $route,
             else if ($scope.ObjectSales.Paid == 1)
                 delete $scope.ObjectSales.RefPaid;
             $scope.ObjectSales.SalesStatusID = localStorage.getItem('CurrentSalesStatus');
-            $http.post('Handler.ashx?action=SelectSales&PageNumber=' + $scope.CurrentPage + '&PageSize=' + vPageSizeSales + '&BranchID=' + $scope.BranchID, $scope.ObjectSales).then(function (data) {
+            $http.post(vHostURL + 'Handler.ashx?action=SelectSales&PageNumber=' + $scope.CurrentPage + '&PageSize=' + vPageSizeSales + '&BranchID=' + $scope.BranchID, $scope.ObjectSales).then(function (data) {
                 $scope.List = [];
                 if (data.data.Rows.length != 0) {
                     $scope.List = data.data.Rows;
@@ -877,7 +877,7 @@ app.controller("SalesCtrl", function ($scope, $http, $location, $filter, $route,
         $scope.ObjectSelectSale = {};
         $scope.ObjectSelectSale.IsDeleted = false;
         $scope.ObjectSelectSale.ID = ID;
-        $http.post('Handler.ashx?action=SelectSales&PageNumber=1&PageSize=100&BranchID=' + $scope.BranchID, $scope.ObjectSelectSale).then(function (data) {
+        $http.post(vHostURL + 'Handler.ashx?action=SelectSales&PageNumber=1&PageSize=100&BranchID=' + $scope.BranchID, $scope.ObjectSelectSale).then(function (data) {
             $scope.SlesObject = data.data.Rows[0];
             $('#VoidModel').modal("show");
         });
@@ -887,7 +887,7 @@ app.controller("SalesCtrl", function ($scope, $http, $location, $filter, $route,
         $scope.SlesObject.SalesAmount = $scope.NewObject.SalesAmount;
         $scope.SlesObject.SalesStatusID = 87; //Pending Void 
         $scope.SlesObject.HistoryCreatedStaffID = JSON.parse(localStorage.getItem('LoggedIn')).ID;
-        $http.post('Handler.ashx?action=InsertSalesHistory', $scope.SlesObject).then(function (data) {
+        $http.post(vHostURL + 'Handler.ashx?action=InsertSalesHistory', $scope.SlesObject).then(function (data) {
             CommonFunctions.InsertLog(9, $scope.SlesObject.ID, 0, 'Pending Void ');
             swal("Voided!", "Waiting approval from administrator", "success");
             $('#VoidModel').modal("hide");
@@ -899,7 +899,7 @@ app.controller("SalesCtrl", function ($scope, $http, $location, $filter, $route,
         $scope.ObjectSelectSale = {};
         $scope.ObjectSelectSale.IsDeleted = false;
         $scope.ObjectSelectSale.ID = ID;
-        $http.post('Handler.ashx?action=SelectSales&PageNumber=1&PageSize=100&BranchID=' + $scope.BranchID, $scope.ObjectSelectSale).then(function (data) {
+        $http.post(vHostURL + 'Handler.ashx?action=SelectSales&PageNumber=1&PageSize=100&BranchID=' + $scope.BranchID, $scope.ObjectSelectSale).then(function (data) {
             $scope.SlesObject = data.data.Rows[0];
             $('#RefundModel').modal("show");
         });
@@ -910,7 +910,7 @@ app.controller("SalesCtrl", function ($scope, $http, $location, $filter, $route,
         $scope.SlesObject.SalesStatusID = 7; // refunded
         $scope.SlesObject.RefAmountFromProvider = $scope.Object.RefSalesAmount;
         $scope.SlesObject.RefDescription = $scope.Object.RefDescription;
-        $http.post('Handler.ashx?action=InsertSalesAfterRefund', $scope.SlesObject).then(function (data) {
+        $http.post(vHostURL + 'Handler.ashx?action=InsertSalesAfterRefund', $scope.SlesObject).then(function (data) {
             CommonFunctions.InsertLog(9, $scope.SlesObject.ID, 0, 'Refund');
             swal("Refunded!", "Please complete refunding process from Refund Sales!", "success");
             $('#RefundModel').modal("hide");
@@ -927,7 +927,7 @@ app.controller("SalesCtrl", function ($scope, $http, $location, $filter, $route,
         if ($scope.AddToInvoiceForm.$valid) {
             $scope.Object.SaleID = $scope.SaleToInvoice;
             $scope.Object.InvoiceNumber = $scope.AddToThisInvoiceNumber;
-            $http.post('Handler.ashx?action=InsertSalesGroup', $scope.Object).then(function (data) {
+            $http.post(vHostURL + 'Handler.ashx?action=InsertSalesGroup', $scope.Object).then(function (data) {
                 swal("Done!", "Sale added successfully to invoice number " + $scope.AddToThisInvoiceNumber.toString(), "success");
                 $('#AddToInvoiceModel').modal("hide");
             });
@@ -946,7 +946,7 @@ app.controller("SalesCtrl", function ($scope, $http, $location, $filter, $route,
             if (willDelete) {
                 Object.SalesStatusID = 94;
                 Object.HistoryCreatedStaffID = JSON.parse(localStorage.getItem('LoggedIn')).ID;
-                $http.post('Handler.ashx?action=InsertSalesHistory', Object).then(function (data) {
+                $http.post(vHostURL + 'Handler.ashx?action=InsertSalesHistory', Object).then(function (data) {
                     CommonFunctions.InsertLog(9, Object.ID, 2, 'Pending Delete');
                     swal("Done! Your ticket waiting approval to Delete", {
                         icon: "success",
@@ -969,7 +969,7 @@ app.controller("SalesCtrl", function ($scope, $http, $location, $filter, $route,
         })
         .then(function (willDelete) {
             if (willDelete) {
-                $http.post('Handler.ashx?action=DeleteSalesHistory&ID=' + id).then(function (data) {
+                $http.post(vHostURL + 'Handler.ashx?action=DeleteSalesHistory&ID=' + id).then(function (data) {
                     CommonFunctions.InsertLog(2, id, 2, 'Delete Sales History');
                     swal("Done! Your select has been deleted", {
                         icon: "success",
@@ -1001,7 +1001,7 @@ app.controller("SalesCtrl", function ($scope, $http, $location, $filter, $route,
                     SalesStatus = 'Void';
                 if (Object.SalesStatusID == 117)
                     SalesStatus = 'Revent Void';
-                $http.post('Handler.ashx?action=UpdateSalesHistory', Object).then(function (data) {
+                $http.post(vHostURL + 'Handler.ashx?action=UpdateSalesHistory', Object).then(function (data) {
                     swal("Approved!", {
                         icon: "success",
                     });
@@ -1032,7 +1032,7 @@ app.controller("SalesCtrl", function ($scope, $http, $location, $filter, $route,
                     SalesStatus = 'Edit';
                 if (Object.SalesStatusID == 87)//Void
                     SalesStatus = 'Void';
-                $http.post('Handler.ashx?action=UpdateSalesHistory', Object).then(function (data) {
+                $http.post(vHostURL + 'Handler.ashx?action=UpdateSalesHistory', Object).then(function (data) {
                     swal("Rejected!", {
                         icon: "success"
                     });
@@ -1057,7 +1057,7 @@ app.controller("SalesCtrl", function ($scope, $http, $location, $filter, $route,
 
         $scope.ObjectSalesPrint.SalesStatusID = localStorage.getItem('CurrentSalesStatus');
         $scope.ObjectSalesPrint.InvoiceNumberPNR = obj.InvoiceNumberPNR;
-        $http.post('Handler.ashx?action=SelectSales&PageNumber=' + $scope.CurrentPage + '&PageSize=' + vPageSizeSales + '&BranchID=' + $scope.BranchID, $scope.ObjectSalesPrint).then(function (data) {
+        $http.post(vHostURL + 'Handler.ashx?action=SelectSales&PageNumber=' + $scope.CurrentPage + '&PageSize=' + vPageSizeSales + '&BranchID=' + $scope.BranchID, $scope.ObjectSalesPrint).then(function (data) {
             $scope.PrintList = [];
             if (data.data.Rows.length != 0) {
                 $scope.PrintList = data.data.Rows;
@@ -1117,7 +1117,7 @@ app.controller("SalesCtrl", function ($scope, $http, $location, $filter, $route,
                $scope.ObjectSelectSale = {};
                $scope.ObjectSelectSale.IsDeleted = false;
                $scope.ObjectSelectSale.ID = ID;
-               $http.post('Handler.ashx?action=SelectSales&PageNumber=1&PageSize=100&BranchID=' + $scope.BranchID, $scope.ObjectSelectSale).then(function (data) {
+               $http.post(vHostURL + 'Handler.ashx?action=SelectSales&PageNumber=1&PageSize=100&BranchID=' + $scope.BranchID, $scope.ObjectSelectSale).then(function (data) {
                    $scope.SlesObject = data.data.Rows[0];
 
                    $scope.SlesObject.SalesStatusID = 117 // Pending Revert 
@@ -1126,7 +1126,7 @@ app.controller("SalesCtrl", function ($scope, $http, $location, $filter, $route,
                    $scope.SlesObject.SalesAmount = $scope.SlesObject.OriginalSalesAmount;
                    $scope.SlesObject.OriginalSalesAmount = 0;
                    $scope.SlesObject.HistoryCreatedStaffID = JSON.parse(localStorage.getItem('LoggedIn')).ID;
-                   $http.post('Handler.ashx?action=InsertSalesHistory', $scope.SlesObject).then(function (data) {
+                   $http.post(vHostURL + 'Handler.ashx?action=InsertSalesHistory', $scope.SlesObject).then(function (data) {
                        CommonFunctions.InsertLog(9, $scope.SlesObject.ID, 2, 'Pending Revert');
                        swal("Revert!", "Waiting approval from administrator!", "success");
                        $route.reload();
@@ -1161,7 +1161,7 @@ app.controller("SalesCtrl", function ($scope, $http, $location, $filter, $route,
             $scope.NotMatched = [];
             $scope.AllOnlineSalesObject = {};
             $scope.AllOnlineSalesObject.SalesStatusID = 4;
-            $http.post('Handler.ashx?action=SelectSales&PageNumber=1&PageSize=' + vUnlimited + '&BranchID=' + $scope.BranchID, $scope.AllOnlineSalesObject).then(function (data) {
+            $http.post(vHostURL + 'Handler.ashx?action=SelectSales&PageNumber=1&PageSize=' + vUnlimited + '&BranchID=' + $scope.BranchID, $scope.AllOnlineSalesObject).then(function (data) {
                 $scope.AllOnlineSales = data.data.Rows;
                 var iCount = 0;
                 setTimeout(function () {
@@ -1181,7 +1181,7 @@ app.controller("SalesCtrl", function ($scope, $http, $location, $filter, $route,
                                 Obj.Fare = parseFloat(itemSheet.Fare) * parseFloat(itemSheet.Rate);
                                 Obj.Tax = parseFloat(itemSheet.Tax) * parseFloat(itemSheet.Rate);
                                 Obj.TotalCost = Obj.Tax + Obj.Fare;
-                                $http.post('Handler.ashx?action=TransferSales', Obj);
+                                $http.post(vHostURL + 'Handler.ashx?action=TransferSales', Obj);
                                 CommonFunctions.InsertLog(4, Obj.ID, 0, 'Transfer Sales');
                                 return false;
                             }
@@ -1204,7 +1204,7 @@ app.controller("SalesCtrl", function ($scope, $http, $location, $filter, $route,
                         item.SalesTypeID = $scope.TransferObject.SalesType.ID;
                     item.AccountantStaffID = JSON.parse(localStorage.getItem('LoggedIn')).ID;
                     item.BankAccountID = 5;
-                    $http.post('Handler.ashx?action=TransferSales', item).then(function (data) {
+                    $http.post(vHostURL + 'Handler.ashx?action=TransferSales', item).then(function (data) {
                         CommonFunctions.InsertLog(4, item.ID, 0, 'Transfer Sales');
                         $scope.StaffList = data.data.Rows;
                     });
@@ -1237,7 +1237,7 @@ app.controller("InvoiceGroupCtrl", function ($scope, $http, $location, $filter, 
     $scope.PageSize = vTotalSizeGlobal;
 
     $scope.Select = function (pageNumber) {
-        $http.post('Handler.ashx?action=SelectSalesGroup', $scope.ObjectSearch).then(function (data) {
+        $http.post(vHostURL + 'Handler.ashx?action=SelectSalesGroup', $scope.ObjectSearch).then(function (data) {
             $scope.List = [];
             if (data.data.Rows.length != 0)
                 $scope.List = data.data.Rows;
@@ -1257,7 +1257,7 @@ app.controller("InvoiceGroupCtrl", function ($scope, $http, $location, $filter, 
             if (willDelete) {
                 Object.SaleID = SaleID;
                 Object.InvoiceNumber = InvoiceNumber;
-                $http.post('Handler.ashx?action=DeleteSalesGroup', Object).then(function (data) {
+                $http.post(vHostURL + 'Handler.ashx?action=DeleteSalesGroup', Object).then(function (data) {
                     CommonFunctions.InsertLog(10, SaleID, 2, 'Delete Sale From Group Invoice');
                     swal("Done! Your select has been deleted", {
                         icon: "success",
@@ -1335,7 +1335,7 @@ app.controller("NewInvoiceGroupCtrl", function ($scope, $http, $location, $filte
         $scope.ObjectSales.SalesStatusID = localStorage.getItem('CurrentSalesStatus');
         if ($scope.ObjectSales.Airline != null)
             $scope.ObjectSales.AirlineID = $scope.ObjectSales.Airline.ID;
-        $http.post('Handler.ashx?action=SelectSales&PageNumber=1&PageSize=' + vTotalSizeGlobal + '&BranchID=' + $scope.BranchID, $scope.ObjectSales).then(function (data) {
+        $http.post(vHostURL + 'Handler.ashx?action=SelectSales&PageNumber=1&PageSize=' + vTotalSizeGlobal + '&BranchID=' + $scope.BranchID, $scope.ObjectSales).then(function (data) {
             $scope.List = [];
             if (data.data.Rows.length != 0)
                 $scope.List = data.data.Rows;
@@ -1355,7 +1355,7 @@ app.controller("NewInvoiceGroupCtrl", function ($scope, $http, $location, $filte
     };
 
     $scope.Submit = function () {
-        $http.post('Handler.ashx?action=InsertSalesGroupByID', SalesSelectedIDs).then(function (data) {
+        $http.post(vHostURL + 'Handler.ashx?action=InsertSalesGroupByID', SalesSelectedIDs).then(function (data) {
             SalesSelectedIDs.forEach(function (item) {
                 CommonFunctions.InsertLog(10, item, 0, 'Add Sale To Group Invoice');
             });
@@ -1367,7 +1367,7 @@ app.controller("NewInvoiceGroupCtrl", function ($scope, $http, $location, $filte
 
     $scope.ObjectAirLines = {};
     $scope.ObjectAirLines.IsDeleted = false;
-    $http.post('Handler.ashx?action=SelectAirline&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectAirLines).then(function (data) {
+    $http.post(vHostURL + 'Handler.ashx?action=SelectAirline&PageNumber=1&PageSize=' + vTotalSizeGlobal, $scope.ObjectAirLines).then(function (data) {
         $scope.AirlinesList = data.data.Rows;
         $scope.Select();
     });

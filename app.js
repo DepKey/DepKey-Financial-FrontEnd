@@ -210,7 +210,7 @@ app.controller("HomeCtrl", function ($scope, $rootScope, $location, $http, $rout
             });
         });
     }
-    $.connection.hub.url = vHostURL;
+
     $scope.hub = $.connection.salesHub;
 
     $scope.initPushNotifications = function () {
@@ -657,7 +657,7 @@ app.config(function ($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true);
 });
 
-app.run(function ($rootScope, $location, $) {
+app.run(function ($rootScope, $location, $http) {
 
     $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 

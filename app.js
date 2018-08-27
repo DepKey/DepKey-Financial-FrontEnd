@@ -210,7 +210,7 @@ app.controller("HomeCtrl", function ($scope, $rootScope, $location, $http, $rout
             });
         });
     }
-
+    $.connection.hub.url = vHostURL;
     $scope.hub = $.connection.salesHub;
 
     $scope.initPushNotifications = function () {
@@ -293,7 +293,6 @@ app.directive('numbersOnly', function () {
 });
 
 app.config(function ($routeProvider, $locationProvider) {
-
     if (localStorage.getItem('LoggedIn') == null || JSON.parse(localStorage.getItem('LoggedIn')).UserPages == null)
         window.location = "/login.html";
 
@@ -658,7 +657,10 @@ app.config(function ($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true);
 });
 
-app.run(function ($rootScope, $location) {
+app.run(function ($rootScope, $location, $) {
+
+    $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
+
     if (JSON.parse(localStorage.getItem('LoggedIn')).UserPermissions != null)
         $rootScope.UserPermissions = JSON.parse(localStorage.getItem('LoggedIn')).UserPermissions.toString().split(',');
 

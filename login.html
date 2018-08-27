@@ -23,14 +23,17 @@
     <script src="Scripts/angular.min.js"></script>
     <script>
         var appLogin = angular.module("myAppLogin", []);
+      
         appLogin.controller("LoginCtrl", function ($scope, $http) {
+    $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
+
             if (localStorage.getItem('LoggedIn') != null)
                 window.location = "/index.html";
             $scope.LoginObject = {};
             $scope.Login = function () {
                 $scope.LoginForm.$setSubmitted();
                 if ($scope.LoginForm.$valid) {
-                    $http.post('Handler.ashx?action=SelectStaff&PageNumber=1&PageSize=1', $scope.LoginObject).then(
+                    $http.post('http://5.79.102.57:8085/Handler.ashx?action=SelectStaff&PageNumber=1&PageSize=1', $scope.LoginObject).then(
                         function(data) {
                             $scope.Error = false;
                             if (data.data.Rows.length != 0) {

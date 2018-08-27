@@ -1,0 +1,161 @@
+﻿<!-- Custom Theme Scripts -->
+<!--<script src="/Template/build/js/custom.min.js"></script>-->
+<!-- top tiles -->
+<div class="row tile_count">
+    <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-globe"></i> Online Sales</span>
+        <div class="count green">{{SalesCounts.OnlineSales}}</div>
+        <span class="count_bottom"><i class="green">{{SalesCounts.TransferSalesToday}} Sales</i> Transfered Today</span>
+    </div>
+    <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-clock-o"></i> Waiting Update</span>
+        <div class="count red">{{SalesCounts.SalesWaitingUpdate}}</div>
+        <span class="count_bottom"><i class="green">{{SalesCounts.UpdatedSalesThisMonth}}</i> Updaeted This Month</span>
+    </div>
+    <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-clock-o"></i> Waiting Void / Revert</span>
+        <div class="count red">{{SalesCounts.SalesWaitingVoid}}</div>
+        <span class="count_bottom"><i class="green">{{SalesCounts.VoidedSalesThisMonth}}</i> Voided / Reverted This Month</span>
+    </div>
+    <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-clock-o"></i> Waiting Delete</span>
+        <div class="count red">{{SalesCounts.SalesWaitingDelete}}</div>
+        <span class="count_bottom"><i class="green">{{SalesCounts.DeleteedSalesThisMonth}}</i> Deleted This Month</span>
+    </div>
+    <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-check"></i> Voided</span>
+        <div class="count">{{SalesCounts.VoidedSales}}</div>
+        <span class="count_bottom"><i class="{{SalesCounts.VoidFlag}}"><i ng-class="{'fa fa-sort-asc': SalesCounts.VoidFlag == 'green', 'fa fa-sort-desc' : SalesCounts.VoidFlag == 'red'}"></i>{{SalesCounts.VoidPercentage}}% </i> From last Week</span>
+    </div>
+    <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-check"></i> Refunded</span>
+        <div class="count">{{SalesCounts.RefundedSales}}</div>
+        <span class="count_bottom"><i class="{{SalesCounts.RefundFlag}}"><i ng-class="{'fa fa-sort-asc': SalesCounts.RefundFlag == 'green', 'fa fa-sort-desc' : SalesCounts.RefundFlag == 'red'}"></i>{{SalesCounts.RefundPercentage}}% </i> From last Week</span>
+    </div>
+</div>
+<!-- /top tiles -->
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="dashboard_graph x_panel tile">
+            <div class="row x_title">
+                <div class="col-md-6">
+                    <h3>Statistics <small>Last two weeks sales coming</small></h3>
+                </div>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div id="chart_plot_01" class="demo-placeholder"></div>
+                <p style="margin-top: 1%;">
+                    <i class="fa fa-square" style="color:rgba(38, 185, 154, 0.38); margin-right:5px;"></i><span style="margin-right:1%;">Last Week</span>
+                    <i class="fa fa-square" style="color:rgba(3, 88, 106, 0.38); margin-right:5px;"></i><span style="margin-right:1%;"> This Week</span>
+                </p>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+<div class="row">
+
+    <div class="col-md-4 col-sm-4 col-xs-12">
+        <div class="x_panel tile fixed_height_320">
+            <div class="x_title">
+                <h2>Month Profit</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div id="graph_bar" style="width:100%; height:280px;"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-4 col-xs-12">
+        <div class="x_panel tile fixed_height_320 overflow_hidden">
+            <div class="x_title">
+                <h2>Staff Achievements [Create]</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <table class="" style="width:100%">
+                    <tr>
+                        <th style="width:37%;">
+                            <p>Top 5</p>
+                        </th>
+                        <th>
+                            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                                <p class="">Name</p>
+                            </div>
+                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                                <p class="">Progress</p>
+                            </div>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <canvas class="canvasDoughnut" height="140" width="140" style="margin: 15px 10px 10px 0"></canvas>
+                        </td>
+                        <td>
+                            <table class="tile_info">
+                                <tr ng-repeat="x in StaffAchievements">
+                                    <td>
+                                        <p><i class="fa fa-square {{x.Color}}"></i>{{x.Name}} </p>
+                                    </td>
+                                    <td>{{x.Progress}}%</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 col-sm-4 col-xs-12">
+        <div class="x_panel tile fixed_height_320">
+            <div class="x_title">
+                <h2>Quick Settings</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="dashboard-widget-content">
+                    <ul class="quick-list">
+                        <li>
+                            <i class="fa fa-clock-o"></i><a href="" ng-click="ChangeRoute('WaitingActions', 0)">Waiting Update</a>
+                        </li>
+                        <li>
+                            <i class="fa fa-clock-o"></i><a href="" ng-click="ChangeRoute('WaitingActions', 0)">Waiting Void</a>
+                        </li>
+                        <li><i class="fa fa-clock-o"></i><a href="" ng-click="ChangeRoute('WaitingActions', 0)">Waiting Delete</a> </li>
+                        <li>
+                            <i class="fa fa-clock-o"></i><a href="" ng-click="ChangeRoute('WaitingActions', 0)">Waiting Revert</a>
+                        </li>
+                    </ul>
+                    <div class="sidebar-widget">
+                        <h4>Actions Taken</h4>
+                        <canvas width="150" height="80" id="chart_gauge_01" class="" style="width: 160px; height: 100px;"></canvas>
+                        <div class="goal-wrapper">
+                            <span id="gauge-text" class="gauge-value pull-left">0</span>
+                            <span class="gauge-value pull-left">%</span>
+                            <span id="goal-text" class="goal-value pull-right">100%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- bootstrap-progressbar -->
+<script src="Template/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+<!-- Flot -->
+<script src="Template/vendors/Flot/jquery.flot.js"></script>
+<script src="Template/vendors/Flot/jquery.flot.pie.js"></script>
+<script src="Template/vendors/Flot/jquery.flot.time.js"></script>
+<script src="Template/vendors/Flot/jquery.flot.stack.js"></script>
+<script src="Template/vendors/Flot/jquery.flot.resize.js"></script>
+<!-- Flot plugins -->
+<script src="Template/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+<script src="Template/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+<script src="Template/vendors/flot.curvedlines/curvedLines.js"></script>
+<!-- DateJS -->
+<script src="Template/vendors/DateJS/build/date.js"></script>
+<!-- morris.js -->
+<script src="Template/vendors/raphael/raphael.min.js"></script>
+<script src="Template/vendors/morris.js/morris.min.js"></script>

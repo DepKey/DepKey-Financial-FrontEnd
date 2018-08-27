@@ -1,0 +1,221 @@
+﻿<div class="page-title">
+    <div class="title_left">
+        <h3>Staff Management</h3>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="row">
+    <div class="col-md-6 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Add/Update <small>From here you can add new User or update exists User</small></h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <br />
+                <form class="form-horizontal form-label-left input_mask" name="FormMain" novalidate accessible-form>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                            Role
+                            <span style="color: red">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <ui-select ng-model="Object.Role" theme="selectize" title="Choose a Role" style="width:100%" ng-required="true" name="RoleID">
+                                <ui-select-match placeholder="Search Roles">{{$select.selected.Title}}</ui-select-match>
+                                <ui-select-choices repeat="item in Roles | propsFilter: {Title: $select.search}">
+                                    <div ng-bind-html="item.Title | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span style="color: red" ng-show="FormMain.$submitted && FormMain.RoleID.$error.required">Required</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                            Branch
+                            <span style="color: red">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <ui-select ng-model="Object.Branch" theme="selectize" title="Choose a Branch" style="width:100%" ng-required="true" name="BranchID">
+                                <ui-select-match placeholder="Search Branches">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="item in Branchs | propsFilter: {Name: $select.search}">
+                                    <div ng-bind-html="item.Name | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span style="color: red" ng-show="FormMain.$submitted && FormMain.BranchID.$error.required">Required</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                            Name
+                            <span style="color: red">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control has-feedback-left" ng-model="Object.Name" required name="Name">
+                            <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                            <span style="color: red" ng-show="FormMain.$submitted && FormMain.Name.$error.required">Required</span>
+                        </div>
+                    </div>
+
+                    <div ng-show="Object.Role.ID != 53">
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                Email
+                                <span style="color: red">*</span>
+                            </label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <input type="text" class="form-control has-feedback-left" ng-model="Object.Email" ng-required="Object.Role.ID != 53" name="Email">
+                                <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                                <span style="color: red" ng-show="FormMain.$submitted && FormMain.Email.$error.required">Required</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                Username
+                                <span style="color: red">*</span>
+                            </label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <input type="text" class="form-control has-feedback-left" ng-model="Object.Username" ng-required="Object.Role.ID != 53" name="Username">
+                                <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                                <span style="color: red" ng-show="FormMain.$submitted && FormMain.Username.$error.required">Required</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                Password
+                                <span style="color: red">*</span>
+                            </label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <input type="text" class="form-control has-feedback-left" ng-model="Object.Password" ng-required="Object.Role.ID != 53" name="Password">
+                                <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                                <span style="color: red" ng-show="FormMain.$submitted && FormMain.Password.$error.required">Required</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                Limit
+                                <span style="color: red">*</span>
+                            </label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <input type="text" class="form-control has-feedback-left" ng-model="Object.Limit" ng-required="Object.Role.ID != 53" name="Limit">
+                                <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                                <span style="color: red" ng-show="FormMain.$submitted && FormMain.Limit.$error.required">Required</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div  ng-show="Object.Role.ID != 53" class="row">
+                        <div class="col-md-6" style="padding-left:77px">
+                            <label>
+                                Pages <span style="color: red">*</span>
+                            </label>
+                            <br />
+                            <div ng-repeat="x in Pages">
+                                <input type="checkbox" ng-checked="Object.UserPagesList.indexOf(x.ID) > -1" name="Pages" ng-click="AddRemovePages(x.ID)" /> {{x.Title}}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label>
+                                Permissions <span style="color: red">*</span>
+                            </label>
+                            <br />
+                            <div ng-repeat="x in Permissions">
+                                <input type="checkbox" ng-checked="Object.UserPermissionsList.indexOf(x.ID) > -1" name="Permissions" ng-click="AddRemovePermissions(x.ID)" /> {{x.Title}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group" style="text-align: center">
+                        <button type="submit" class="btn btn-success" ng-click="Submit()">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Listing <small>List all Users ordered by date descending</small></h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <form class="form-horizontal form-label-left input_mask" name="FormSearch" novalidate>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                            Name
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control has-feedback-left" ng-model="ObjectSearch.Name" required name="Title">
+                            <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                            Is Deleted
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="checkbox" ng-model="ObjectSearch.IsDeleted" class="checkbox" />
+                        </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group" style="text-align: center">
+                        <button type="submit" class="btn btn-success" ng-click="Select(1)">Search</button>
+                    </div>
+                </form>
+                <br />
+                <div class="x_content" ng-show="List.length!=0">
+                    <table id="datatable" class="table table-striped table-bordered">
+                        <thead>
+                            <tr style="background-color:#007bb7;color:white">
+                                <th>Name</th>
+                                <!--<th>Username</th>
+                                <th>Password</th>-->
+                                <th>Branch</th>
+                                <th>Role</th>
+                                <th>IsDeleted</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in List">
+                                <td>{{x.Name}}</td>
+                                <!--<td>{{x.Username}}</td>
+                                <td>{{x.Password}}</td>-->
+                                <td>{{x.BranchName}}</td>
+                                <td>{{x.RoleTitle}}</td>
+                                <td>{{x.IsDeleted == false? 'No' : 'Yes'}}</td>
+                                <td>
+                                    <a href="" ng-click="Update(x.ID)"><span class="label label-info">Update</span></a>
+                                    <a href="" ng-click="Delete(x.ID)" ng-hide="x.IsDeleted == true"><span class="label label-danger">Delete</span></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="col-md-12">
+                        <uib-pagination ng-model="CurrentPage"
+                                        ng-change="Select(CurrentPage)"
+                                        items-per-page="PageSize"
+                                        total-items="totalItems"
+                                        max-size="5"
+                                        class="pagination-sm"
+                                        next-text="Next"
+                                        previous-text="Previous"
+                                        last-text="Last"
+                                        first-text="First"
+                                        force-ellipses="true"
+                                        boundary-links="true"
+                                        rotate="false">
+                        </uib-pagination>
+                        <div style="margin-top: -22px" class="dataTables_info" id="example2_info" role="status" aria-live="polite">Page {{CurrentPage}} From {{totalPages}} Pages</div>
+                    </div>
+                </div>
+                <div class="x_content" ng-show="List.length==0">
+                    <div class="alert alert-info alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <strong>Empty!</strong> No result matches your search.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,426 @@
+﻿<div class="page-title hidden-print">
+    <div class="title_left">
+        <h3>Sales Listing<small></small></h3>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel ">
+            <div class="x_title hidden-print">
+                <h2>{{Title}} <small>From here you can manage Sales. Update, Void, Refund, Delete & Details</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="#">Settings 1</a>
+                            </li>
+                            <li>
+                                <a href="#">Settings 2</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content hidden-print">
+                <div class="col-md-3">
+                    Ticket Number
+                    <br />
+                    <input type="text" class="form-control" ng-model="ObjectSales.TicketNumber" ng-change="Select()" placeholder="Ticket Number">
+                </div>
+                <div class="col-md-3">
+                    Pax Name
+                    <br />
+                    <input type="text" class="form-control" ng-model="ObjectSales.PaxName" ng-change="Select()" placeholder="Pax Name">
+                </div>
+                <div ng-class="Title == 'Refund Sales'?'col-md-2':'col-md-3'">
+                    Date From
+                    <br />
+                    <input type="date" class="form-control" ng-model="ObjectSales.DateFrom" ng-blur="Select()">
+                </div>
+                <div ng-class="Title == 'Refund Sales'?'col-md-2':'col-md-3'">
+                    Date To
+                    <br />
+                    <input type="date" class="form-control" ng-model="ObjectSales.DateTo" ng-blur="Select()">
+                </div>
+                <div class="col-md-2" ng-show="Title == 'Refund Sales'">
+                    Paid
+                    <br />
+                    <input type="radio" name="Paid" ng-model="ObjectSales.Paid" value="1" ng-click="Select()" ng-checked="true" />All
+                    &nbsp;&nbsp;
+                    <input type="radio" name="Paid" ng-model="ObjectSales.Paid" value="2" ng-click="Select()" />Paid
+                    &nbsp;&nbsp;
+                    <input type="radio" name="Paid" ng-model="ObjectSales.Paid" value="3" ng-click="Select()" />Unpaid
+                </div>
+                <div class="col-md-12" style="text-align: center">
+                    <br />
+                    <button type="submit" class="btn btn-success" ng-click="Select()">Search</button>
+                </div>
+            </div>
+            <div class="x_content" ng-show="List.length!=0">
+                <div class="row" ng-show="Title == 'Online Sales'">
+                    <div class="col-md-2">
+                        <ui-select ng-model="TransferObject.SalesType" theme="selectize" title="Choose a Sale type" style="width:100%" name="SalesTypeID" ng-change="loadVendor(TransferObject.SalesType.ID)">
+                            <ui-select-match placeholder="Search Sales Type">{{$select.selected.Title}}</ui-select-match>
+                            <ui-select-choices repeat="item in SalesTypeList | propsFilter: {Title: $select.search}">
+                                <div ng-bind-html="item.Title | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-md-6">
+                        <ui-select id="SubAccountControl" ng-model="TransferObject.SubAccount" theme="selectize" title="Choose a Sub-Account" style="width:100%" ng-disabled="!NotForBSP">
+                            <ui-select-match placeholder="Search Vendor">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="item in SubAccountsList | propsFilter: {Name: $select.search}">
+                                <div ng-bind-html="item.Name | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-info" ng-click="Transfer(null)" ng-disabled="(TransferObject.SubAccount == null && TransferObject.SalesType.ID != 25) || TransferObject.SalesType == null || SalesSelected.length == 0">Transfer Selected</button>
+                        <button type="submit" style="width:150px" class="btn btn-info" ng-click="OpenFile()" ng-disabled="(TransferObject.SubAccount == null && TransferObject.SalesType.ID != 25) || TransferObject.SalesType == null">Excel Sheet</button>
+                        <img style="width:50px;" src="/Template/images/loading-animated.gif" ng-show="Loading" />
+                        <input type="file" id="fileID" ng-model="fileModel" onchange="angular.element(this).scope().Transfer(this)" ng-hide="true" />
+                    </div>
+                </div>
+                <table id="datatable" class="table table-striped table-bordered hidden-print">
+                    <thead>
+                        <tr style="background-color:#007bb7;color:white">
+                            <th ng-show="Title == 'Online Sales'">#</th>
+                            <th>Ticket Number</th>
+                            <th ng-hide="Title == 'Rejected Requests'">Sales Type</th>
+                            <th ng-hide="Title == 'Rejected Requests'">PNR</th>
+                            <th ng-hide="Title == 'Rejected Requests'">Airline</th>
+                            <th ng-hide="Title == 'Rejected Requests'">Pax Name</th>
+                            <th ng-hide="Title == 'Rejected Requests' ||  Title == 'Void Sales' ">Sales Amount</th>
+                            <th ng-show="Title == 'Void Sales'">Void Charge</th>
+                            <th ng-show="Title == 'Refund Sales'">Amount From Provider</th>
+                            <th ng-show="Title == 'Refund Sales'">Amount To Customer</th>
+                            <th ng-show="Title == 'Refund Sales'">Profit</th>
+                            <th ng-show="Title == 'Void Sales'">Sales Amount</th>
+                            <th ng-hide="Title == 'Rejected Requests'">Issued By</th>
+                            <th ng-hide="Title == 'Rejected Requests'">Status</th>
+                            <th ng-show="Title == 'Rejected Requests'">Reject Reason</th>
+                            <th ng-show="Title == 'Rejected Requests' || Title == 'Waiting Actions'">Reject By</th>
+                            <th ng-show="Title == 'Rejected Requests'">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody ng-repeat="x in List">
+                        <tr>
+                            <td ng-show="Title == 'Online Sales'"><input type="checkbox" ng-click="AddRemoveSales(x)" /></td>
+                            <td>{{x.TicketNumber}}</td>
+                            <td ng-hide="Title == 'Rejected Requests'">{{x.SalesTypeTitle}}</td>
+                            <td ng-hide="Title == 'Rejected Requests'">{{x.PNR}}</td>
+                            <td ng-hide="Title == 'Rejected Requests'">{{x.AirlineName}}</td>
+                            <td ng-hide="Title == 'Rejected Requests'">{{x.PaxName}}</td>
+                            <td ng-hide="Title == 'Rejected Requests'">{{x.SalesAmount}}</td>
+                            <td ng-show="Title == 'Refund Sales'">{{x.RefAmountFromProvider}}</td>
+                            <td ng-show="Title == 'Refund Sales'">{{x.RefAmountToCustomer != null ? x.RefAmountToCustomer : x.RefDescription}}</td>
+                            <td ng-show="Title == 'Refund Sales'">{{x.Profit}}</td>
+                            <td ng-show="Title == 'Void Sales'">{{x.OriginalSalesAmount}}</td>
+                            <td ng-hide="Title == 'Rejected Requests'">{{x.CreatedName}}</td>
+                            <td ng-hide="Title == 'Rejected Requests'">{{x.PNR  == null && x.SalesStatusTitle =='Transfered' ? 'New' : x.SalesStatusTitle}}</td>
+                            <td ng-show="Title == 'Rejected Requests'">{{x.RejectionReason}}</td>
+                            <td ng-show="Title == 'Rejected Requests' || Title == 'Waiting Actions'">{{x.AccountantName}}</td>
+                            <td ng-show="Title == 'Rejected Requests'">
+                                <a href="" ng-click="DeleteHistory(x.ID)">
+                                    <span class="label label-danger">Delete</span>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr ng-hide="Title == 'Rejected Requests'">
+                            <td colspan="{{Title == 'Online Sales'?10:(Title == 'Refund Sales'?11:9)}}" s style="text-align:right">
+                                <a href="" ng-show="UserPermissions.indexOf('75') > -1 && x.HistoryID == null && x.SalesStatusID == 5" ng-click="Update(x.ID)"><span class="label label-success">Update</span></a>
+                                <a href="" ng-show="UserPermissions.indexOf('74') > -1 && x.HistoryID == null && x.SalesStatusID == 5" ng-click="Void(x.ID)"><span class="label label-info">Void</span></a>
+                                <a href="" ng-show="UserPermissions.indexOf('72') > -1 && x.HistoryID == null && x.SalesStatusID == 5" ng-click="Refund(x.ID)"><span class="label label-warning">Refund</span></a>
+                                <a href="" ng-show="UserPermissions.indexOf('73') > -1 && x.HistoryID == null && x.SalesStatusID == 5" ng-click="Delete(x)"><span class="label label-danger">Delete</span></a>
+
+                                <a href="" ng-show="(UserPermissions. indexOf('82') > -1 && x.SalesStatusID == 95) || (UserPermissions.indexOf('83') > -1 && x.SalesStatusID == 87)  || (UserPermissions.indexOf('93') > -1 && x.SalesStatusID == 94) || (UserPermissions. indexOf('118') > -1 && x.SalesStatusTitle == 'Pending Revert')" ng-click="Approve(x)">
+                                    <span class="label label-success">Approve</span>
+                                </a>
+                                <a href="" ng-show="(UserPermissions.indexOf('82') >  -1 && x.SalesStatusID == 95)  || (UserPermissions.indexOf('83') > -1 && x.SalesStatusID == 87)  || (UserPermissions.indexOf('93') > -1 && x.SalesStatusID == 94) || (UserPermissions. indexOf('118') > -1 && x.SalesStatusTitle == 'Pending Revert')" ng-click="Reject(x)">
+                                    <span class="label label-danger">Reject</span>
+                                </a>
+                                <a href="" ng-click="Details(x.ID, 'Sales')" ng-if="Title != 'Waiting Actions'"><span class="label label-default">Details</span></a>
+                                <a href="" ng-click="Details(x.SaleID, 'History')" ng-if="Title == 'Waiting Actions'"><span class="label label-default">Details</span></a>
+                                <a href="" ng-click="AddToInvoice(x.ID)" ng-show="x.SalesStatusID == 5"><span class="label label-info">Add To Invoice</span></a>
+                                <a href="" ng-click="PrintInvoice(x)" ng-show="x.SalesStatusID == 5"><span class="label label-success">Print Invoice</span></a>
+                                <a ng-show="(x.HistoryID != null && x.SalesStatusID == 5) || Title == 'Waiting Sales'"><span class="label label-primary">{{x.SalesHistoryStatus}}</span></a>
+                                <a href="" ng-click="Pay(x.ID, x.SalesStatusID)" ng-show="(Title == 'Refund Sales' || Title == 'Void Sales') && (x.RefPaid != true) && (x.SalesHistoryStatus != 'Pending Revert' || x.SalesHistoryStatusID != 119)"><span class="label label-info">Pay</span></a>
+                                <a href="" ng-click="Revert(x.ID)" ng-show="(Title == 'Void Sales'  && x.RefPaid != true )&& (x.SalesHistoryStatus != 'Pending Revert' || x.SalesHistoryStatusID != 119)"><span class="label label-info">Revert</span></a>
+                                <span class="label label-primary ng-binding" ng-show="(x.SalesHistoryStatus != 'Pending Revert' || x.SalesHistoryStatusID == 119) && x.SalesStatusID == 6">{{x.SalesHistoryStatus}}</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="col-md-12 hidden-print">
+                    <uib-pagination ng-model="CurrentPage"
+                                    ng-change="Select(CurrentPage)"
+                                    items-per-page="PageSize"
+                                    total-items="totalItems"
+                                    max-size="5"
+                                    class="pagination-sm"
+                                    next-text="Next"
+                                    previous-text="Previous"
+                                    last-text="Last"
+                                    first-text="First"
+                                    force-ellipses="true"
+                                    boundary-links="true"
+                                    rotate="false">
+                    </uib-pagination>
+                    <br />
+                    <div style="margin-top: -22px" class="dataTables_info" id="example2_info" role="status" aria-live="polite">Page {{CurrentPage}} From {{totalPages}} Pages</div>
+                </div>
+                <div class="row" ng-show="List.length==0">
+                    <div class="alert alert-info alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <strong>Empty!</strong> No result matches your search.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="VoidModel" class="modal fade bs-example-modal-lg hidden-print" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg" style="margin-top:8%;" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form name="VoidForm" class="form-horizontal" novalidate>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Sale Void <small>From here you can Void Sale</small></h2>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <br />
+                                <div class="x_content">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                            Old Sale Amount
+                                            <span style="color: red">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <input disabled type="text" class="form-control has-feedback-left" ng-model="SlesObject.SalesAmount" required name="Amount" />
+                                            <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                                            <span style="color: red" ng-show="VoidForm.$submitted && FormMain.Amount.$error.required">Required</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                            New Sale Amount
+                                            <span style="color: red">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <input type="number" min="0" class="form-control has-feedback-left" ng-model="NewObject.SalesAmount" required name="Amount" />
+                                            <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                                            <span style="color: red" ng-show="VoidForm.$submitted && FormMain.Amount.$error.required">Required</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <button type="button" data-dissmiss="modal" class="btn btn-success" ng-click="SaveVoid()">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="RefundModel" class="modal fade bs-example-modal-lg hidden-print" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg" style="margin-top:8%;" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form name="RefundForm" class="form-horizontal" novalidate>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Sale Refund <small>From here you can Refund Sale</small></h2>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <br />
+                                <div class="x_content">
+                                    <div class="form-group">
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <label class="control-label col-md-4 col-sm-2 col-xs-12">
+                                                Issued By
+                                                <span style="color: red">*</span>
+                                            </label>
+                                            <div class="col-md-8 col-sm-8 col-xs-12">
+                                                <ui-select ng-model="Object.CreatedStaff" theme="selectize" title="Choose a person" style="width:100%" ng-required="true" name="CreatedStaffID">
+                                                    <ui-select-match placeholder="Search on Staff list">{{$select.selected.Name}}</ui-select-match>
+                                                    <ui-select-choices repeat="item in StaffList | propsFilter: {Name: $select.search}">
+                                                        <div ng-bind-html="item.Name | highlight: $select.search"></div>
+                                                    </ui-select-choices>
+                                                </ui-select>
+
+                                                <span style="color: red" ng-show="RefundForm.$submitted && RefundForm.CreatedStaffID.$error.required">Required</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <label class="control-label col-md-4 col-sm-2 col-xs-12">
+                                                Refund Date
+                                                <span style="color: red">*</span>
+                                            </label>
+                                            <div class="col-md-8 col-sm-6 col-xs-12">
+                                                <input type="text" class="form-control" ng-model="Object.JournalDate" ng-disabled="true" required name="JournalDate">
+                                                <span style="color: red" ng-show="RefundForm.$submitted && RefundForm.JournalDate.$error.required">Required</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <label class="control-label col-md-4 col-sm-3 col-xs-12">
+                                                Amount To Customer
+                                                <span style="color: red">*</span>
+                                            </label>
+                                            <div class="col-md-8 col-sm-6 col-xs-12">
+                                                <input type="text" class="form-control" ng-model="Object.RefDescription" required name="RefDescription" />
+                                                <span style="color: red" ng-show="RefundForm.$submitted && RefundForm.RefDescription.$error.required">Required</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <label class="control-label col-md-4 col-sm-2 col-xs-12">
+                                                Amount From Provider
+                                                <span style="color: red">*</span>
+                                            </label>
+                                            <div class="col-md-8 col-sm-6 col-xs-12">
+                                                <input class="form-control" ng-model="Object.RefSalesAmount" type="number" name="SalesAmount" required min="0">
+                                                <span style="color: red" ng-show="RefundForm.$submitted && RefundForm.SalesAmount.$error.required">Required</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" data-dissmiss="modal" class="btn btn-success" ng-click="SaveRefund()">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="AddToInvoiceModel" class="modal fade bs-example-modal-lg hidden-print" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg" style="margin-top:8%;" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form name="AddToInvoiceForm" class="form-horizontal" novalidate>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Add To Invoice Number Group <small>From here you can Add sale to exist Invoice Number Group</small></h2>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <br />
+                                <div class="x_content">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                            Invoice Number
+                                            <span style="color: red">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <input type="text" class="form-control has-feedback-left" ng-model="AddToThisInvoiceNumber" required name="AddToThisInvoiceNumber" />
+                                            <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                                            <span style="color: red" ng-show="AddToInvoiceForm.$submitted && AddToInvoiceForm.AddToThisInvoiceNumber.$error.required">Required</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" data-dissmiss="modal" class="btn btn-success" ng-click="SaveAddToInvoice()">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="content invoice visible-print-block">
+    <img src="/Template/logo.png" />
+    <div class="row">
+        <div class="col-xs-12 invoice-header">
+            <h1 class="text-center">
+                <br />
+                <i class="fa fa-globe"></i> Invoice: {{PrintSale.InvoiceNumberPNR}}
+            </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 invoice-info">
+            <strong>Date</strong>: {{PrintSale.CreationDate | date : 'M/d/yy'}}
+            <br /><br />
+            <strong>Branch</strong>: {{PrintSale.BranchName}} |
+            <strong>Accountant</strong>: {{PrintSale.AccountantName}} |
+            <strong>Issued By</strong>: {{PrintSale.CreatedName}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 table">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Pax Name</th>
+                        <th>Ticket/Vo</th>
+                        <th>Sales Type</th>
+                        <th style="width: 29%">Description</th>
+                        <th>Total Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="x in PrintList">
+                        <td>{{x.PaxName}}</td>
+                        <td>{{x.TicketNumber}}</td>
+                        <td> {{x.SalesTypeTitle}}</td>
+                        <td>{{x.Destination}} </td>
+                        <td> {{x.SalesAmount}} </td>
+                    </tr>
+                </tbody>
+                <thead>
+                    <tr>
+                        <td colspan="4" class="text-right">
+                            <b>
+                                Total Amount
+                            </b>
+                        </td>
+                        <td>
+                            {{TotalSalesAmount}}
+                        </td>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <!-- /.col -->
+    </div>
+    <div class="row">
+        <!-- accepted payments column -->
+        <div class="col-xs-6">
+            <p class="lead">Payment Methods:</p>
+            <strong>Cash</strong>: {{TotalPrintCash != null ? TotalPrintCash : '-' }}  |
+            <strong>Credit</strong>: {{TotalPrintCredit != null ? TotalPrintCredit : '-' }} |
+            <strong>Visa</strong>: {{TotalPrintVisa != null ? TotalPrintVisa : '-' }} |
+            <strong>Card</strong>: {{TotalPrintCard != null ? TotalPrintCard : '-' }} |
+            <strong>Advance</strong>: {{TotalPrintAdvance != null ? TotalPrintAdvance : '-' }} |
+            <strong>Complementary</strong>: {{TotalPrintComplementary != null ? TotalPrintComplementary : '-' }}
+        </div>
+        <!-- /.col -->
+        <!-- /.col -->
+    </div>
+</section>
+

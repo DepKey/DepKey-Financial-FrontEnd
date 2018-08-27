@@ -1,0 +1,311 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="/">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="Template/images/favicon.ico" type="image/ico" />
+    <title>Central DepKey</title>
+    <!-- Bootstrap -->
+    <link href="Template/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="Template/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="Template/vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="Template/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+    <!-- bootstrap-progressbar -->
+    <link href="Template/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+    <!-- JQVMap -->
+    <link href="Template/vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet" />
+
+    <link href="Template/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+    <!-- bootstrap-datetimepicker -->
+    <link href="Template/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
+    <!-- Custom Theme Style -->
+    <link href="Template/build/css/custom.min.css" rel="stylesheet">
+    <!-- Switchery -->
+    <link href="Template/vendors/switchery/dist/switchery.min.css" rel="stylesheet">
+    <!-- UI Select-->
+    <!-- themes -->
+    <link href="Template/SelectControl/select2.css" rel="stylesheet" />
+    <link href="Template/SelectControl/selectize.default.css" rel="stylesheet" />
+    <style>
+        .select2 > .select2-choice.ui-select-match {
+            /* Because of the inclusion of Bootstrap */
+            height: 29px;
+        }
+
+        .selectize-control > .selectize-dropdown {
+            top: 36px;
+        }
+        /* Some additional styling to demonstrate that append-to-body helps achieve the proper z-index layering. */
+        .select-box {
+            background: #fff;
+            position: relative;
+            z-index: 1;
+        }
+
+        .alert-info.positioned {
+            margin-top: 1em;
+            position: relative;
+            z-index: 10000; /* The select2 dropdown has a z-index of 9999 */
+        }
+
+        code {
+       padding: 6px 12px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #4da5df;
+    background-color: #f9f2f4;
+    border-radius: 4px;
+}
+    </style>
+    <link href="Template/SelectControl/select.css" rel="stylesheet">
+</head>
+<body ng-class="IsSalesReportRoute == true ? 'nav-sm' : 'nav-md'" ng-app="myApp" ng-Controller="HomeCtrl">
+    <div class="container body">
+        <div class="main_container">
+            <div class="col-md-3 left_col">
+                <div class="left_col scroll-view">
+                    <div class="navbar nav_title" style="border: 0;">
+                        <a href="/" class="site_title"><img src="Template/logo.png" width="200px" /></a>
+                    </div>
+                    <div class="clearfix"></div>
+                    <!-- menu profile quick info -->
+                    <div class="profile clearfix">
+                        <div class="profile_pic">
+                            <img src="Template/images/img.jpg" alt="..." class="img-circle profile_img">
+                        </div>
+                        <div class="profile_info">
+                            <span>Welcome,</span>
+                            <h2>{{Name}}</h2>
+                        </div>
+                    </div>
+                    <!-- /menu profile quick info -->
+                    <br />
+                    <!-- sidebar menu -->
+                    <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                        <div class="menu_section">
+                            <ul class="nav side-menu">
+                                <li ng-class="CurrentRoute == '/'?'current-page':'fake'">
+                                    <a ng-click="ChangeRoute('', 0)"><i class="fa fa-home"></i> Home </a>
+                                </li>
+                            </ul>
+                            <br />
+                            <div ng-show="UserPages.indexOf('62') > -1 || UserPages.indexOf('63') > -1  || UserPages.indexOf('64') > -1 || UserPages.indexOf('65') > -1 || UserPages.indexOf('66') > -1">
+                                <div>
+                                    <h3>General</h3>
+                                    <br />
+                                    <ul class="nav side-menu">
+                                        <li ng-show="UserPages.indexOf('60') > -1 || UserPages.indexOf('61') > -1 || UserPages.indexOf('62') > -1 || UserPages.indexOf('63') > -1  || UserPages.indexOf('64') > -1 || UserPages.indexOf('65') > -1 || UserPages.indexOf('66') > -1">
+                                            <a><i class="fa fa-edit"></i> Sales <span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu">
+                                                <li ng-show="UserPages.indexOf('62') > -1" ng-class="CurrentRoute == '/NewSale'?'current-page':'fake'"><a ng-click="ChangeRoute('NewSale')">New Sale</a></li>
+                                                <li ng-show="UserPages.indexOf('64') > -1" ng-class="CurrentRoute == '/SalesListing'?'current-page':'fake'"><a ng-click="ChangeRoute('SalesListing', 5)">Sales List</a></li>
+                                                <li ng-show="UserPages.indexOf('63') > -1" ng-class="CurrentRoute == '/OnlineSales'?'current-page':'fake'"><a ng-click="ChangeRoute('OnlineSales', 4)">Online List</a></li>
+                                                <li ng-show="UserPages.indexOf('65') > -1" ng-class="CurrentRoute == '/RefundSales'?'current-page':'fake'"><a ng-click="ChangeRoute('RefundSales', 7)">Refund List</a></li>
+                                                <li ng-show="UserPages.indexOf('66') > -1" ng-class="CurrentRoute == '/VoidSales'?'current-page':'fake'"><a ng-click="ChangeRoute('VoidSales', 6)">Void List</a></li>
+                                                <li ng-show="UserPages.indexOf('121') > -1" ng-class="CurrentRoute == '/NewInvoiceGroup'?'current-page':'fake'"><a ng-click="ChangeRoute('NewInvoiceGroup', 5)">New Invoice Group</a></li>
+                                                <li ng-show="UserPages.indexOf('116') > -1" ng-class="CurrentRoute == '/InvoiceGroup'?'current-page':'fake'"><a ng-click="ChangeRoute('InvoiceGroup')">Invoice Groups</a></li>
+                                                <li ng-show="UserPages.indexOf('91') > -1" ng-class="CurrentRoute == '/WaitingActions'?'current-page':'fake'"><a ng-click="ChangeRoute('WaitingActions', 0)">Sales Waiting Action</a></li>
+                                                <li ng-class="CurrentRoute == '/RejectedRequests'?'current-page':'fake'"><a ng-click="ChangeRoute('RejectedRequests', 1)">Rejected Sales Requests</a></li>
+                                            </ul>
+                                        </li>
+                                        <li ng-show="UserPages.indexOf('60') > -1 || UserPages.indexOf('61') > -1">
+                                            <a><i class="fa fa-table"></i> Journals <span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu">
+                                                <li ng-show="UserPages.indexOf('60') > -1" ng-class="CurrentRoute == '/NewJournal'?'current-page':'fake'"><a ng-click="ChangeRoute('NewJournal')">New Journal</a></li>
+                                                <li ng-show="UserPages.indexOf('61') > -1" ng-class="CurrentRoute == '/Journals'?'current-page':'fake'"><a ng-click="ChangeRoute('Journals',61)">Journals List</a></li>
+                                                <li ng-class="CurrentRoute == '/Outstanding'?'current-page':'fake'"><a ng-click="ChangeRoute('Outstanding')">Outstanding</a></li>
+                                                <li ng-class="CurrentRoute == '/WattingJournalAction'?'current-page':'fake'"><a ng-click="ChangeRoute('WattingJournalAction',108)">Journals Watting Action</a></li>
+                                                <li ng-class="CurrentRoute == '/RejectedJournalRequests'?'current-page':'fake'"><a ng-click="ChangeRoute('RejectedJournalRequests',122)">Rejected Journal List</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                    <br />
+                                </div>
+                                <div ng-show="UserPages.indexOf('67') > -1 || UserPages.indexOf('68') > -1">
+                                    <h3>Other</h3>
+                                    <br />
+                                    <ul class="nav side-menu">
+                                        <li>
+                                            <a><i class="fa fa-bitcoin"></i>Reports <span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu" ng-style="styleMenu">
+                                                <li ng-show="UserPages.indexOf('90') > -1" ng-class="CurrentRoute == '/DailySalesReport'?'current-page':'fake'"><a ng-click="ChangeRoute('DailySalesReport')">Daily Sales Report</a></li>
+                                                <li ng-show="UserPages.indexOf('120') > -1" ng-class="CurrentRoute == '/SalesReport'?'current-page':'fake'"><a ng-click="ChangeRoute('SalesReport')">Sales Report</a></li>
+                                                  <li ng-show="UserPages.indexOf('97') > -1" ng-class="CurrentRoute == '/StaffTotalSalesReport'?'current-page':'fake'"><a ng-click="ChangeRoute('StaffTotalSalesReport')">Staff  Report</a></li>
+                                                <li ng-show="UserPages.indexOf('67') > -1" ng-class="CurrentRoute == '/JournalReport'?'current-page':'fake'"><a ng-click="ChangeRoute('JournalReport')">Journal Report</a></li>
+                                                <li ng-show="UserPages.indexOf('68') > -1" ng-class="CurrentRoute == '/AirlineReport'?'current-page':'fake'"><a ng-click="ChangeRoute('AirlineReport')">Sales To Airline Report</a></li>
+                                                <li ng-show="UserPages.indexOf('89') > -1" ng-class="CurrentRoute == '/TotalAirlineReport'?'current-page':'fake'"><a ng-click="ChangeRoute('TotalAirlineReport')">Total Sales To Airline Report</a></li>
+                                                <li ng-show="UserPages.indexOf('92') > -1" ng-class="CurrentRoute == '/ExpensesReport'?'current-page':'fake'"><a ng-click="ChangeRoute('ExpensesReport')">Total Expenses Report</a></li>
+                                                <li ng-show="UserPages.indexOf('96') > -1" ng-class="CurrentRoute == '/IncomeReport'?'current-page':'fake'"><a ng-click="ChangeRoute('IncomeReport')">Total Income Report</a></li>
+                                                <li ng-show="UserPages.indexOf('97') > -1" ng-class="CurrentRoute == '/ProfitReport'?'current-page':'fake'"><a ng-click="ChangeRoute('ProfitReport')">Total Profit Report</a></li>
+                                                <li ng-show="UserPages.indexOf('110') > -1" ng-class="CurrentRoute == '/TrailBalanceReport'?'current-page':'fake'"><a ng-click="ChangeRoute('TrailBalanceReport')">Trial Balance  Report</a></li>
+                                                <li ng-show="UserPages.indexOf('113') > -1" ng-class="CurrentRoute == '/SalesPerBNRReport'?'current-page':'fake'"><a ng-click="ChangeRoute('SalesPerBNRReport')">Sales Per BNR Report</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                    <br />
+                                </div>
+                            </div>
+                            <div ng-show="UserPages.indexOf('58') > -1 || UserPages.indexOf('59') > -1">
+                                <h3>Admin</h3>
+                                <br />
+                                <ul class="nav side-menu">
+                                    <li>
+                                        <a><i class="fa fa-search"></i>Lookup <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li ng-show="UserPages.indexOf('58') > -1" ng-class="CurrentRoute == '/LookupType'?'current-page':'fake'"><a ng-click="ChangeRoute('LookupType')">Lookup Type</a></li>
+                                            <li ng-show="UserPages.indexOf('59') > -1" ng-class="CurrentRoute == '/Lookup'?'current-page':'fake'"><a ng-click="ChangeRoute('Lookup')">Lookup</a></li>
+                                        </ul>
+                                    </li>
+                                    <li ng-show="UserPages.indexOf('86') > -1" ng-class="CurrentRoute == '/Staff'?'current-page':'fake'">
+                                        <a ng-click="ChangeRoute('Staff')"><i class="fa fa-search"></i>Staff Management</a>
+                                    </li>
+                                    <li ng-show="UserPages.indexOf('88') > -1" ng-class="CurrentRoute == '/Accounts'?'current-page':'fake'">
+                                        <a ng-click="ChangeRoute('Accounts')"><i class="fa fa-search"></i>Accounts Management</a>
+                                    </li>
+                                    <li ng-show="UserPages.indexOf('112') > -1" ng-class="CurrentRoute == '/Log'?'current-page':'fake'">
+                                        <a ng-click="ChangeRoute('Log')"><i class="fa fa-search"></i>Log</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /sidebar menu -->
+                    <!-- /menu footer buttons -->
+                    <div class="sidebar-footer hidden-small">
+                        <a data-toggle="tooltip" data-placement="top" title="Logout" href="" ng-click="Logout()">
+                            <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+                        </a>
+                    </div>
+                    <!-- /menu footer buttons -->
+                </div>
+            </div>
+            <!-- top navigation -->
+            <div class="top_nav">
+                <div class="nav_menu hidden-print">
+                    <nav>
+                        <div class="nav toggle">
+                            <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                        </div>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="">
+                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                    <img src="Template/images/img.jpg" alt="">{{Name}}
+                                    <span class="fa fa-angle-down"></span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                    <li ng-show="UserPermissions.indexOf('115') > -1"><a href="" ng-show="BranchID == 2" ng-click="SwichBranch(1)"><i class="glyphicon glyphicon-refresh pull-right"></i> Swich Branch</a></li>
+                                    <li ng-show="UserPermissions.indexOf('115') > -1"><a href="" ng-show="BranchID == 1" ng-click="SwichBranch(2)"><i class="glyphicon glyphicon-refresh pull-right"></i> Swich Branch</a></li>
+                                    <li><a href="" ng-click="Logout()"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                                </ul>
+                            </li>
+
+                            <li role="presentation" class="dropdown" >
+                                <a ng-click="GetNotification()" href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa fa-envelope-o"></i>
+                                    <span style="position: absolute;font-size: 10px;padding: 2px 6px;right: 2px;top: 8px;line-height: 13px;" class="badge bg-green" ng-hide="Notifications == 0 ||UserPermissions.indexOf('71') == -1">{{Notifications}}</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                    <li>
+                                        <a href="" ng-click="ChangeRoute('WaitingActions', 0)" class="info-number">
+                                            Sales Witing List
+                                            <span class="badge bg-green" style="margin-right: 5%;" ng-hide="NotificationsSalesCount == 0 ||UserPermissions.indexOf('71') == -1">{{NotificationsSalesCount}}</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="" ng-click="ChangeRoute('WattingJournalAction', 108)" class="info-number">
+                                            Journals Witing List
+                                            <span class="badge bg-green" style="margin-right: 5%;" ng-hide="NotificationsJournalCount == 0 ||UserPermissions.indexOf('71') == -1">{{NotificationsJournalCount}}</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            
+                            <li>
+                                <div style="text-align:center" data-loading> </div>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <!-- /top navigation -->
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div ng-view>
+                </div>
+            </div>
+            <!-- /page content -->
+            <!-- footer content -->
+            <footer class="hidden-print">
+                <div class="pull-right">
+                    ©2018 All Rights Reserved. DepKey
+                </div>
+                <div class="clearfix"></div>
+            </footer>
+            <!-- /footer content -->
+        </div>
+    </div>
+
+    <script src="Template/vendors/jquery/dist/jquery.min.js"></script>
+    <script src="Scripts/jquery-ui-1.11.4/jquery-ui.js"></script>
+    <script src="Template/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="Template/vendors/fastclick/lib/fastclick.js"></script>
+    <script src="Template/vendors/Chart.js/dist/Chart.min.js"></script>
+    <script src="Template/vendors/gauge.js/dist/gauge.min.js"></script>
+    <script src="Template/vendors/iCheck/icheck.min.js"></script>
+    <script src="Template/vendors/skycons/skycons.js"></script>
+    <script src="Template/vendors/DateJS/build/date.js"></script>
+    <script src="Template/vendors/jqvmap/dist/jquery.vmap.js"></script>
+    <script src="Template/vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+    <script src="Template/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+    <script src="Template/vendors/switchery/dist/switchery.min.js"></script>
+    <script src="Template/build/js/custom.js"></script>
+
+    <script src="Scripts/angular.min.js"></script>
+    <script src="Scripts/angular-sanitize.js"></script>
+    <script src="Scripts/angular-route.js"></script>
+    <script src="Scripts/angular-filter.js"></script>
+    <script src="Scripts/ui-bootstrap-tpls-1.3.2.js"></script>
+    <script src="Template/vendors/moment/min/moment.min.js"></script>
+
+    <script src="Scripts/sweetalert.min.js"></script>
+
+    <script src="Template/ReadExcel/modernizr.min.js"></script>
+    <script src="Template/ReadExcel/infragistics.core.js"></script>
+    <script src="Template/ReadExcel/infragistics.lob.js"></script>
+    <script src="Template/ReadExcel/infragistics.ext_core.js"></script>
+    <script src="Template/ReadExcel/infragistics.ext_collections.js"></script>
+    <script src="Template/ReadExcel/infragistics.ext_text.js"></script>
+    <script src="Template/ReadExcel/infragistics.ext_io.js"></script>
+    <script src="Template/ReadExcel/infragistics.ext_ui.js"></script>
+    <script src="Template/ReadExcel/infragistics.documents.core_core.js"></script>
+    <script src="Template/ReadExcel/infragistics.ext_collectionsextended.js"></script>
+    <script src="Template/ReadExcel/infragistics.excel_core.js"></script>
+    <script src="Template/ReadExcel/infragistics.ext_threading.js"></script>
+    <script src="Template/ReadExcel/infragistics.ext_web.js"></script>
+    <script src="Template/ReadExcel/infragistics.xml.js"></script>
+    <script src="Template/ReadExcel/infragistics.documents.core_openxml.js"></script>
+    <script src="Template/ReadExcel/infragistics.excel_serialization_openxml.js"></script>
+
+    <script src="app.js"></script>
+    <script src="Department/Admin/Admin.js"></script>
+    <script src="Department/Journals/Journals.js"></script>
+    <script src="Department/Sales/Sales.js"></script>
+    <script src="Department/Reports/Reports.js"></script>
+    <script src="Department/Dashboard/Dashboard.js"></script>
+
+    <script src="Template/SelectControl/select.js"></script>
+
+    <script src="Scripts/jquery.signalR-2.3.0.min.js"></script>
+    <script src="signalr/signalr/hubs"></script>
+
+
+</body>
+</html>

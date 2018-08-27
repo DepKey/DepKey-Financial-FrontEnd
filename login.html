@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="/Template/images/favicon.ico" type="image/ico" />
+    <title>Login</title>
+    <!-- Bootstrap -->
+    <link href="/Template/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="/Template/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="/Template/vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- Animate.css -->
+    <link href="/Template/vendors/animate.css/animate.min.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="/Template/build/css/custom.min.css" rel="stylesheet">
+
+    <script src="Scripts/angular.min.js"></script>
+    <script>
+        var appLogin = angular.module("myAppLogin", []);
+        appLogin.controller("LoginCtrl", function ($scope, $http) {
+            if (localStorage.getItem('LoggedIn') != null)
+                window.location = "/index.html";
+            $scope.LoginObject = {};
+            $scope.Login = function () {
+                $scope.LoginForm.$setSubmitted();
+                if ($scope.LoginForm.$valid) {
+                    $http.post('Handler.ashx?action=SelectStaff&PageNumber=1&PageSize=1', $scope.LoginObject).then(
+                        function(data) {
+                            $scope.Error = false;
+                            if (data.data.Rows.length != 0) {
+                                localStorage.setItem('LoggedIn', JSON.stringify(data.data.Rows[0]));
+                                localStorage.setItem('CurrentSalesStatus', 0);
+                                window.location = "/";
+                            } else
+                                $scope.Error = true;
+                        });
+                }
+            };
+        });
+        appLogin.directive('ngEnter', function () {
+            return function (scope, element, attrs) {
+
+                element.bind("keydown keypress",
+                    function (event) {
+                        if (event.which === 13) {
+                            scope.$apply(function () {
+                                scope.$eval(attrs.ngEnter);
+                            });
+
+                            event.preventDefault();
+                        }
+                    });
+            };
+        });
+    </script>
+</head>
+<body class="login" ng-app="myAppLogin" ng-Controller="LoginCtrl">
+    <div>
+        <a class="hiddenanchor" id="signup"></a>
+        <a class="hiddenanchor" id="signin"></a>
+        <div class="login_wrapper">
+            <div class="animate form login_form">
+                <section class="login_content">
+                    <form name="LoginForm" novalidate="">
+                        <h1>Login Form</h1>
+                        <div>
+                            <input type="text" ng-model="LoginObject.Username" class="form-control" placeholder="Username" required="" ng-enter="Login()"/>
+                        </div>
+                        <div>
+                            <input type="password" ng-model="LoginObject.Password" class="form-control" placeholder="Password" required="" ng-enter="Login()"/>
+                        </div>
+                        <div>
+                            <a class="btn btn-default submit" href="" ng-click="Login()">Log in</a>
+                        </div>
+                        <br/>
+                        <span style="color:red" ng-show="Error">Sorry, You have entered an invalid username or password</span>
+                        <div class="clearfix"></div>
+                        <div class="separator">
+                            <div>
+                               <img src="Template/logo.png" />
+                                <p>©2018 All Rights Reserved. DepKey</p>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>

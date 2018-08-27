@@ -1,0 +1,224 @@
+﻿<div class="">
+    <div class="page-title">
+        <div class="title_left">
+            <h3>Journals Listing<small></small></h3>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>{{Title}} <small>From here you can manage Journals. Update, Delete & Details</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li>
+                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a href="#">Settings 1</a>
+                                </li>
+                                <li>
+                                    <a href="#">Settings 2</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="row">
+                    <div class="col-md-4">
+                        Journal Number
+                        <br />
+                        <input type="number" class="form-control" ng-model="ObjectSearch.JournalNumber" ng-change="Select(1)">
+                    </div>
+                    <div class="col-md-4">
+                        Date From
+                        <br />
+                        <input type="date" class="form-control" ng-model="ObjectSearch.DateFrom" ng-blur="Select(1)">
+                    </div>
+                    <div class="col-md-4">
+                        Date To
+                        <br />
+                        <input type="date" class="form-control" ng-model="ObjectSearch.DateTo" ng-blur="Select(1)">
+                    </div>
+                    <div class="col-md-12" style="text-align: center">
+                        <br />
+                        <button type="submit" class="btn btn-success" ng-click="Select()">Search</button>
+                    </div>
+                </div>
+                <br />
+                <div class="x_content">
+                    <table id="datatable" class="table table-striped table-bordered">
+                        <thead>
+                            <tr style="background-color:#007bb7;color:white">
+                                <th>Journal Number</th>
+                                <th>Journal Date</th>
+                                <th>Journal Type</th>
+                                <th>Branch Name</th>
+                                <th>Staff</th>
+                                <th ng-hide="Title != 'Rejected Journal List'">Rejection Reason</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in List" ng-hide="x.ApprovalStatusID == 34 && Title != 'Rejected Journal List'">
+                                <td>{{x.JournalNumber}}</td>
+                                <td ng-hide="AddEditFlag">
+                                    {{x.JournalDate}}<a ng-hide="x.HistoryID == 32 || Title == 'Watting Journal Action'" class="collapse-link" style="float: right; color: #26B99A;cursor: pointer" title="Edit" ng-click="EnableEdit()"></a>
+                                </td>
+                                <td ng-show="AddEditFlag">
+                                    <input ng-blur="Submit(x.ID,x.JournalDate)" type="text" class="form-control" ng-model="x.JournalDate" ng-disabled="false" ng-required="true">
+                                </td>
+                                <td>{{x.JournalTypeTitle}}</td>
+                                <td>{{x.BranchName}}</td>
+                                <td>{{x.StaffName}}</td>
+                                <td ng-hide="Title != 'Rejected Journal List'">{{x.RejectionReason}}</td>
+                                <td>
+                                    <a href="" ng-click="Movements(x.ID)"><span class="label label-info">Movements</span></a>
+                                    <!--<a href="" ng-hide="x.HistoryID == 32 ||x.HistoryID == 34 || x.JournalTypeID == 57" ng-click="Delete(x.ID)"><span class="label label-danger">Delete</span></a>-->
+                                    <a href="" ng-show="x.HistoryID == 32 && Title == 'Watting Journal Action'" ng-click="Approve(x.ID)">
+                                        <span class="label label-success">Approve</span>
+                                    </a>
+                                    <a href="" ng-show="x.HistoryID == 32 && Title == 'Watting Journal Action'" ng-click="Reject(x)">
+                                        <span class="label label-danger">Reject</span>
+                                    </a>
+                                    <a ng-show="x.HistoryID == 32"><span class="label label-primary">{{x.MovTypeTitle}}</span></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="col-md-12">
+                        <uib-pagination ng-model="CurrentPage"
+                                        ng-change="Select(CurrentPage)"
+                                        items-per-page="PageSize"
+                                        total-items="totalItems"
+                                        max-size="5"
+                                        class="pagination-sm"
+                                        next-text="Next"
+                                        previous-text="Previous"
+                                        last-text="Last"
+                                        first-text="First"
+                                        force-ellipses="true"
+                                        boundary-links="true"
+                                        rotate="false">
+                        </uib-pagination>
+                        <br />
+                        <div style="margin-top: -22px" class="dataTables_info" id="example2_info" role="status" aria-live="polite">Page {{CurrentPage}} From {{totalPages}} Pages</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="EditMovementModel" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg" style="width:90%; margin-top:8%;" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form name="EditMovmentForm" class="form-horizontal" novalidate>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Journals Movment <small>From here you can manage Journal Movement. Update & Details</small></h2>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+                                    <table ng-show="MovmentList.length > 0" id="datatable" class="table table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Journal Number</th>
+                                                <th>Journal Date</th>
+                                                <th>Account Name</th>
+                                                <th>Debit</th>
+                                                <th>Credit</th>
+                                                <th>Destination</th>
+                                                <th ng-show="ShowOpenEditbtn">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="x in MovmentList">
+                                                <td>{{x.JournalNumber}}</td>
+                                                <td>{{x.JournalDate}}</td>
+                                                <td ng-hide="editMode">{{x.AccountName}}</td>
+                                                <td ng-show="editMode">
+                                                    <select ng-change="SelectAccount(x.AccountID)" ng-required="true" class="form-control" ng-model="x.AccountID" ng-options="item.ID as item.FullName for item in MainAndSubAccounts"></select>
+
+                                                </td>
+                                                <td ng-hide="editMode">{{x.Debit}}</td>
+                                                <td ng-show="editMode">
+                                                    <input type="number" min="0" class="form-control" ng-model="x.Debit" required ng-disabled="x.Debit == 0">
+                                                </td>
+                                                <td ng-hide="editMode">{{x.Credit}}</td>
+                                                <td ng-show="editMode">
+                                                    <input type="number" min="0" class="form-control" ng-model="x.Credit" required ng-disabled="x.Credit == 0">
+                                                </td>
+                                                <td ng-hide="editMode">{{x.MovementDescription}}</td>
+                                                <td ng-show="editMode">
+                                                    <input type="text" class="form-control" ng-model="x.MovementDescription" required />
+                                                </td>
+                                                <td ng-show="ShowOpenEditbtn">
+                                                    <a style="cursor: pointer;" data-ng-hide="editMode" data-ng-click="editMode = true"><span class="label label-success">Edit</span></a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <div class="text-center" style="font-weight:bold; padding-bottom:1%;" ng-show="NewMovmentList.length > 0">New Movments</div>
+                                    <table ng-show="NewMovmentList.length > 0" id="datatable" class="table table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Journal Number</th>
+                                                <th>Journal Date</th>
+                                                <th>Account Name</th>
+                                                <th>Debit</th>
+                                                <th>Credit</th>
+                                                <th>Destination</th>
+                                                <th ng-show="ShowOpenEditbtn">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="x in NewMovmentList">
+                                                <td>{{x.JournalNumber}}</td>
+                                                <td style="background-color:yellow;">{{x.JournalDate}}</td>
+                                                <td ng-hide="editMode">{{x.AccountName}}</td>
+                                                <td ng-show="editMode">
+                                                    <select ng-change="SelectAccount(x.AccountID)" ng-required="true" class="form-control" ng-model="x.AccountID" ng-options="item.ID as item.FullName for item in MainAndSubAccounts"></select>
+
+                                                </td>
+                                                <td ng-hide="editMode">{{x.Debit}}</td>
+                                                <td ng-show="editMode">
+                                                    <input type="number" min="0" class="form-control" ng-model="x.Debit" required ng-disabled="x.Debit == 0">
+                                                </td>
+                                                <td ng-hide="editMode">{{x.Credit}}</td>
+                                                <td ng-show="editMode">
+                                                    <input type="number" min="0" class="form-control" ng-model="x.Credit" required ng-disabled="x.Credit == 0">
+                                                </td>
+                                                <td ng-hide="editMode">{{x.MovementDescription}}</td>
+                                                <td ng-show="editMode">
+                                                    <input type="text" class="form-control" ng-model="x.MovementDescription" required />
+                                                </td>
+                                                <td ng-show="ShowOpenEditbtn">
+                                                    <a style="cursor: pointer;" data-ng-hide="editMode" data-ng-click="editMode = true"><span class="label label-success">Edit</span></a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="text-center" ng-show="ShowOpenEditbtn">
+                                    <button type="button" class="btn btn-success" ng-click="SaveMovmentEdit()">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

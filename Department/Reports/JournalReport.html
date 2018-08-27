@@ -1,0 +1,149 @@
+﻿<div class="">
+    <div class="page-title">
+        <div class="title_left">
+            <h3>Journal Report<small></small></h3>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Movements Listing <small>From here you can find all Journals Movements within specific period</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li>
+                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a href="#">Settings 1</a>
+                                </li>
+                                <li>
+                                    <a href="#">Settings 2</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="row">
+                        <div class="col-md-2">
+                            Main Account
+                            <br />
+                            <ui-select ng-model="ObjectSearch.MainAcc" ng-change="SelectAccount(ObjectSearch.MainAcc.ID)" theme="selectize" title="Choose an Account" style="width:100%"  name="MainAccID">
+                                <ui-select-match placeholder="Search Main Account">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="item in MainAccounts | propsFilter: {Name: $select.search}">
+                                    <div ng-bind-html="item.Name | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+
+                        </div>
+                        <div class="col-md-2">
+                            Sub Account
+                            <br />
+                            <ui-select ng-model="ObjectSearch.SubAcc" ng-change="Select()" theme="selectize" title="Choose an Account" style="width:100%"  name="MainAccID">
+                                <ui-select-match placeholder="Search Sub Account">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="item in SubAccounts | propsFilter: {Name: $select.search}">
+                                    <div ng-bind-html="item.Name | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <div class="col-md-2">
+                            Journal Number
+                            <br />
+                            <input type="text" class="form-control" ng-model="ObjectSearch.JournalNumber" ng-change="Select()">
+                        </div>
+                        <div class="col-md-2">
+                            Description
+                            <br />
+                            <input type="text" class="form-control" ng-model="ObjectSearch.MovementDescription" ng-change="Select()">
+                        </div>
+                        <div class="col-md-2">
+                            Date From
+                            <br />
+                            <input type="date" class="form-control" ng-model="ObjectSearch.DateFrom" ng-blur="Select()">
+                        </div>
+                        <div class="col-md-2">
+                            Date To
+                            <br />
+                            <input type="date" class="form-control" ng-model="ObjectSearch.DateTo" ng-blur="Select()">
+                        </div>
+                        <div class="col-md-12" style="text-align: center">
+                            <br />
+                            <button type="submit" class="btn btn-success" ng-click="Select()">Search</button>
+                            <button type="submit" class="btn btn-success" ng-click="Print()">Print Report</button>
+                        </div>
+                    </div>
+                    <br />
+                    <div id="divPrint" ng-show="List.length> 0">
+                        <div ng-hide="true">
+                            <img src="/Template/logo.png" />
+                            <br /><br />
+                            <span style="font-size:large;font-weight:bold">Journal Report</span>
+                            <br /><br />
+                            From Date: {{ObjectSearch.DateFrom!=null?ObjectSearch.DateFrom:'From Beginning'}} | To Date: {{ObjectSearch.DateTo!=null?ObjectSearch.DateTo:'Till Now'}}
+                            <br /><br />
+                            Account: {{Account}}
+                            <br /><br />
+                        </div>
+                        <table class="table table-striped table-bordered" border="1" cellpadding="0" cellspacing="0">
+                            <thead>
+                                <tr style="background-color: #007bb7; color: white">
+                                    <th class="text-center">Jo No</th>
+                                    <th class="text-center">Jo Date</th>
+                                    <th ng-if="colspanValue == 3" class="text-center">Acc Name</th>
+                                    <th class="text-center">Debit</th>
+                                    <th class="text-center">Credit</th>
+                                    <th class="text-center">Description</th>
+                                </tr>
+                                <tr style="background-color: #b97126; color: white" ng-show="ObjectSearch.AccountID != null">
+                                    <th colspan="{{colspanValue}}" class="text-center">Opening Balance</th>
+                                    <th class="text-center">{{Debit}}</th>
+                                    <th class="text-center">{{Credit}}</th>
+                                    <th class="text-center"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in List">
+                                    <td class="text-center">{{x.JournalNumber}}</td>
+                                    <td class="text-center">{{x.JournalDate}}</td>
+                                    <td ng-if="colspanValue == 3" class="text-center">{{x.AccountName}}</td>
+                                    <td class="text-center">{{x.Debit | RoundByKey : 'Debit'}}</td>
+                                    <td class="text-center">{{x.Credit  | RoundByKey : 'Credit'}}</td>
+                                    <td class="text-center">{{x.MovementDescription}}</td>
+                                </tr>
+                            </tbody>
+                            <thead>
+                                <tr style="background-color: #b97126; color: white">
+                                    <th colspan="{{colspanValue}}" class="text-center">Gross Total</th>
+                                    <th class="text-center">{{TotalDebit | RoundByKey : 'TotalDebit'}}</th>
+                                    <th class="text-center">{{TotalCredit | RoundByKey : 'TotalCredit'}}</th>
+                                    <th class="text-center"></th>
+                                </tr>
+                                <tr style="background-color: #b97126; color: white">
+                                    <th class="text-center" colspan="{{colspanValue}}">{{TotalTitle}}</th>
+                                    <th class="text-center" colspan="2">{{Total | RoundByKey : 'Total'}}</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="x_content" ng-show="List.length==0">
+                        <div class="alert alert-info alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Empty!</strong> No result matches your search.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

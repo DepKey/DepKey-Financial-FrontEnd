@@ -1,0 +1,141 @@
+﻿
+    <div class="page-title">
+        <div class="title_left">
+            <h3>Log Listing<small></small></h3>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Log <small>From here you can see every actions taken by staff</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li>
+                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a href="#">Settings 1</a>
+                                </li>
+                                <li>
+                                    <a href="#">Settings 2</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="row">
+                    <div class="col-md-2">
+                        User
+                        <br />
+                        <ui-select ng-disabled="Details" ng-model="ObjectSearch.Staff" theme="selectize" style="width:100%">
+                            <ui-select-match placeholder="Search Staff">{{$select.selected.Name}}</ui-select-match>
+                            <ui-select-choices repeat="item in StaffList | propsFilter: {Name: $select.search}">
+                                <div ng-bind-html="item.Name | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-md-2">
+                        Ticket Number
+                        <br />
+                        <input type="text" class="form-control" ng-model="ObjectSearch.RelatedID">
+                    </div>
+                    <div class="col-md-2">
+                        Action
+                        <br />
+                        <select class="form-control" ng-model="ObjectSearch.ActionSearch" ng-init="ObjectSearch.ActionSearch = '100'">
+                            <option value="100">All</option>
+                            <option value="0">Insert</option>
+                            <option value="1">Update</option>
+                            <option value="2">Delete</option>
+                            <option value="4">Transfer</option>
+                            <option value="5">Pay</option>
+                            <option value="6">Print</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        Module
+                        <br />
+                        <select class="form-control" ng-model="ObjectSearch.TypeSearch" ng-init="ObjectSearch.TypeSearch = '100'">
+                            <option value="100">All</option>
+                            <option value="0">Sales</option>
+                            <option value="2">Sales History</option>
+                            <option value="10">Sales Invoice Group</option>
+                            <option value="1">Journal</option>
+                            <option value="3">Journal Movement</option>
+                            <option value="5">Report</option>
+                            <option value="6">Lookup</option>
+                            <option value="7">Staff</option>
+                            <option value="8">Account</option>
+                            <option value="9">LookupType</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        Date From
+                        <br />
+                        <input type="date" class="form-control" ng-model="ObjectSearch.DateFrom">
+                    </div>
+                    <div class="col-md-2">
+                        Date To
+                        <br />
+                        <input type="date" class="form-control" ng-model="ObjectSearch.DateTo">
+                    </div>
+                    <div class="col-md-12" style="text-align: center">
+                        <br />
+                        <button type="submit" class="btn btn-success" ng-click="Select()">Search</button>
+                    </div>
+                </div>
+                <br />
+                <div class="x_content" ng-hide="List.length == 0">
+                    <table id="datatable" class="table table-striped table-bordered">
+                        <thead>
+                            <tr style="background-color:#007bb7;color:white">
+                                <th>Creation Date</th>
+                                <th>User</th>
+                                <th>Action</th>
+                                <th>Module</th>
+                                <th>Related ID</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in List">
+                                <td>{{x.CreationDate}}</td>
+                                <td>{{x.StaffName}}</td>
+                                <td>{{x.ActionView}}</td>
+                                <td>{{x.TypeView}}</td>
+                                <td>{{x.RelatedID}}</td>
+                                <td>{{x.Details}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="col-md-12">
+                        <uib-pagination ng-model="CurrentPage"
+                                        ng-change="Select(CurrentPage)"
+                                        items-per-page="PageSize"
+                                        total-items="totalItems"
+                                        max-size="5"
+                                        class="pagination-sm"
+                                        next-text="Next"
+                                        previous-text="Previous"
+                                        last-text="Last"
+                                        first-text="First"
+                                        force-ellipses="true"
+                                        boundary-links="true"
+                                        rotate="false">
+                        </uib-pagination>
+                        <br />
+                        <div style="margin-top: -22px" class="dataTables_info" id="example2_info" role="status" aria-live="polite">Page {{CurrentPage}} From {{totalPages}} Pages</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

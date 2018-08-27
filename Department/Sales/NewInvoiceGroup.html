@@ -1,0 +1,144 @@
+﻿<div class="page-title hidden-print">
+    <div class="title_left">
+        <h3>New Invoice Group<small></small></h3>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="row hidden-print">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel ">
+            <div class="x_title hidden-print">
+                <h2>New Invoice Group <small>From here you can group invoices</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="#">Settings 1</a>
+                            </li>
+                            <li>
+                                <a href="#">Settings 2</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content hidden-print">
+                <div class="col-md-3">
+                    Airline
+                    <br />
+                    <ui-select ng-disabled="Details" ng-model="ObjectSales.Airline" theme="selectize" title="Choose an Airline" style="width:100%" ng-required="true" name="AirlineID">
+                        <ui-select-match placeholder="Search Airlines Name">{{$select.selected.Name}}</ui-select-match>
+                        <ui-select-choices repeat="item in AirlinesList | propsFilter: {Name: $select.search}">
+                            <div ng-bind-html="item.Name | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>                </div>
+                <div class="col-md-2">
+                    Ticket Number
+                    <br />
+                    <input type="text" class="form-control" ng-model="ObjectSales.TicketNumber" ng-change="Select()" placeholder="Ticket Number">
+                </div>
+                <div class="col-md-3">
+                    Pax Name
+                    <br />
+                    <input type="text" class="form-control" ng-model="ObjectSales.PaxName" ng-change="Select()" placeholder="Pax Name">
+                </div>
+                <div class="col-md-2">
+                    Date From
+                    <br />
+                    <input type="date" class="form-control" ng-model="ObjectSales.DateFrom" ng-blur="Select()">
+                </div>
+                <div class="col-md-2">
+                    Date To
+                    <br />
+                    <input type="date" class="form-control" ng-model="ObjectSales.DateTo" ng-blur="Select()">
+                </div>
+                <div class="col-md-12" style="text-align: center">
+                    <br />
+                    <button type="submit" class="btn btn-success" ng-click="Select()">Search</button>
+                </div>
+            </div>
+            <div class="x_content" ng-show="List.length!=0">
+                <table id="datatable" class="table table-striped table-bordered hidden-print">
+                    <thead>
+                        <tr style="background-color:#007bb7;color:white">
+                            <th>#</th>
+                            <th>Ticket Number</th>
+                            <th>Sales Type</th>
+                            <th>PNR</th>
+                            <th>Airline</th>
+                            <th>Pax Name</th>
+                            <th>Sales Amount</th>
+                            <th>Issued By</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody ng-repeat="x in List">
+                        <tr>
+                            <td><input id="{{x.ID}}" type="checkbox" ng-click="AddRemoveSales(x)" /></td>
+                            <td>{{x.TicketNumber}}</td>
+                            <td>{{x.SalesTypeTitle}}</td>
+                            <td>{{x.PNR}}</td>
+                            <td>{{x.AirlineName}}</td>
+                            <td>{{x.PaxName}}</td>
+                            <td>{{x.SalesAmount}}</td>
+                            <td>{{x.CreatedName}}</td>
+                            <td>{{x.PNR  == null && x.SalesStatusTitle =='Transfered' ? 'New' : x.SalesStatusTitle}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table id="datatable" class="table table-striped table-bordered hidden-print" ng-hide="SalesSelected.length == 0">
+                    <thead>
+                        <tr style="background-color:#b97126;color:white;text-align:center;font-weight:bold">
+                            <td colspan="9">Selected Sales</td>
+                        </tr>
+                        <tr style="background-color:#007bb7;color:white">
+                            <th>Ticket Number</th>
+                            <th>Sales Type</th>
+                            <th>PNR</th>
+                            <th>Airline</th>
+                            <th>Pax Name</th>
+                            <th>Sales Amount</th>
+                            <th>Issued By</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody ng-repeat="x in SalesSelected">
+                        <tr>
+                            <td>{{x.TicketNumber}}</td>
+                            <td>{{x.SalesTypeTitle}}</td>
+                            <td>{{x.PNR}}</td>
+                            <td>{{x.AirlineName}}</td>
+                            <td>{{x.PaxName}}</td>
+                            <td>{{x.SalesAmount}}</td>
+                            <td>{{x.CreatedName}}</td>
+                            <td>{{x.PNR  == null && x.SalesStatusTitle =='Transfered' ? 'New' : x.SalesStatusTitle}}</td>
+                            <td>
+                                <a href="" ng-click="AddRemoveSales(x)"><span class="label label-danger">Delete</span></a></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="col-md-12" style="text-align: center" ng-hide="SalesSelected.length == 0">
+                    <button type="submit" class="btn btn-success" ng-click="Submit()">Submit</button>
+                </div>
+            </div>
+            <div class="x_content" ng-show="List.length==0">
+                <div class="alert alert-info alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <strong>Empty!</strong> No result matches your search.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,151 @@
+﻿<div class="page-title hidden-print">
+    <div class="title_left">
+        <h3>Invoice Group<small></small></h3>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="row hidden-print">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel ">
+            <div class="x_title hidden-print">
+                <h2>Invoice Group <small>From here you can print grouped invoices</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="#">Settings 1</a>
+                            </li>
+                            <li>
+                                <a href="#">Settings 2</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content hidden-print">
+                <div class="col-md-3">
+                    Invoice Number
+                    <br />
+                    <input type="text" class="form-control" ng-model="ObjectSearch.InvoiceNumber" ng-change="Select()">
+                </div>
+                <div class="col-md-12" style="text-align: center">
+                    <br />
+                    <button type="submit" class="btn btn-success" ng-click="Select()">Search</button>
+                </div>
+            </div>
+            <div class="x_content" ng-show="List.length!=0">
+                <table id="datatable" class="table table-striped table-bordered hidden-print">
+                    <thead>
+                        <tr style="background-color:#007bb7;color:white">
+                            <th>Ticket Number</th>
+                            <th>Sales Type</th>
+                            <th>PNR</th>
+                            <th>Airline</th>
+                            <th>Pax Name</th>
+                            <th>Sales Amount</th>
+                            <th>Issued By</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody ng-repeat="x in List">
+                        <tr>
+                            <td>{{x.TicketNumber}}</td>
+                            <td>{{x.SalesTypeTitle}}</td>
+                            <td>{{x.PNR}}</td>
+                            <td>{{x.AirlineName}}</td>
+                            <td>{{x.PaxName}}</td>
+                            <td>{{x.SalesAmount}}</td>
+                            <td>{{x.CreatedName}}</td>
+                            <td>{{x.PNR  == null && x.SalesStatusTitle =='Transfered' ? 'New' : x.SalesStatusTitle}}</td>
+                            <td><a href="" ng-click="Delete(x.ID, x.InvoiceNumberGroup)"><span class="label label-danger">Delete</span></a></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="col-md-12" style="text-align: center" ng-hide="List.length == 0">
+                    <button type="submit" class="btn btn-success" ng-click="PrintInvoice()">Print</button>
+                </div>
+            </div>
+            <div class="x_content" ng-show="List.length==0">
+                <div class="alert alert-info alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <strong>Empty!</strong> No result matches your search.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="content invoice visible-print-block">
+    <img src="/Template/logo.png" />
+    <div class="row">
+        <div class="col-xs-12 invoice-header">
+            <h1 class="text-center">
+                <br />
+                <i class="fa fa-globe"></i> Invoices: {{InvoiceNumberGroup}}
+            </h1>
+        </div>
+    </div>
+    <div class="row">
+        <br />
+        <div class="col-xs-12 table">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Pax Name</th>
+                        <th>Ticket/Vo</th>
+                        <th>Sales Type</th>
+                        <th style="width: 29%">Description</th>
+                        <th>Total Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="x in List">
+                        <td>{{x.PaxName}}</td>
+                        <td>{{x.TicketNumber}}</td>
+                        <td> {{x.SalesTypeTitle}}</td>
+                        <td>{{x.Destination}} </td>
+                        <td> {{x.SalesAmount}} </td>
+                    </tr>
+                </tbody>
+                <thead>
+                    <tr>
+                        <td colspan="4" class="text-right">
+                            <b>
+                                Total Amount
+                            </b>
+                        </td>
+                        <td>
+                            {{TotalSalesAmount}}
+                        </td>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <!-- /.col -->
+    </div>
+    <div class="row">
+        <!-- accepted payments column -->
+        <div class="col-xs-6">
+            <p class="lead">Payment Methods:</p>
+            <strong>Cash</strong>: {{TotalPrintCash != null ? TotalPrintCash : '-' }}  |
+            <strong>Credit</strong>: {{TotalPrintCredit != null ? TotalPrintCredit : '-' }} |
+            <strong>Visa</strong>: {{TotalPrintVisa != null ? TotalPrintVisa : '-' }} |
+            <strong>Card</strong>: {{TotalPrintCard != null ? TotalPrintCard : '-' }} |
+            <strong>Advance</strong>: {{TotalPrintAdvance != null ? TotalPrintAdvance : '-' }} |
+            <strong>Complementary</strong>: {{TotalPrintComplementary != null ? TotalPrintComplementary : '-' }}
+        </div>
+        <!-- /.col -->
+        <!-- /.col -->
+    </div>
+</section>
+

@@ -1,0 +1,187 @@
+﻿<div class="">
+    <div class="page-title">
+        <div class="title_left">
+            <h3>Sales Report<small></small></h3>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Sales Report <small>From here you can find  all sales details</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li>
+                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a href="#">Settings 1</a>
+                                </li>
+                                <li>
+                                    <a href="#">Settings 2</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="row">
+                        <div class="col-md-2">
+                            Main Account
+                            <br />
+                            <ui-select ng-model="ObjectSearch.MainAcc" ng-change="SelectAccount(ObjectSearch.MainAcc.ID)" theme="selectize" title="Choose an Account" style="width:100%" name="MainAccID">
+                                <ui-select-match placeholder="Search Main Account">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="item in MainAccounts | propsFilter: {Name: $select.search}">
+                                    <div ng-bind-html="item.Name | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+
+                        </div>
+                        <div class="col-md-2">
+                            Sub Account
+                            <br />
+                            <ui-select ng-model="ObjectSearch.SubAcc" ng-change="Search()" theme="selectize" title="Choose an Account" style="width:100%" name="MainAccID">
+                                <ui-select-match placeholder="Search Sub Account">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="item in SubAccounts | propsFilter: {Name: $select.search}">
+                                    <div ng-bind-html="item.Name | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <div class="col-md-1">
+                            Sales Type
+                            <br />
+                            <ui-select ng-model="ObjectSearch.SalesType" theme="selectize" title="Choose a sales type" style="width:100%" ng-required="true" name="SalesTypeID" ng-change="Search()">
+                                <ui-select-match placeholder="Search">{{$select.selected.Title}}</ui-select-match>
+                                <ui-select-choices repeat="item in SalesTypeList | propsFilter: {Title: $select.search}">
+                                    <div ng-bind-html="item.Title | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <div class="col-md-1">
+                            Airline
+                            <br />
+                            <ui-select ng-model="ObjectSearch.Airline" theme="selectize" title="Choose an Airline" style="width:100%" ng-required="true" name="AirlineID" ng-change="Search()">
+                                <ui-select-match placeholder="Search Airline">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="item in AirlinesList | propsFilter: {Name: $select.search}">
+                                    <div ng-bind-html="item.Name | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <div class="col-md-2">
+                            Staff
+                            <br />
+                            <ui-select ng-model="ObjectSearch.Staff" theme="selectize" title="Choose a person" style="width:100%" ng-required="true" name="CreatedStaffID" ng-change="Search()">
+                                <ui-select-match placeholder="Search Staff">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="item in StaffList | propsFilter: {Name: $select.search}">
+                                    <div ng-bind-html="item.Name | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <div class="col-md-2">
+                            Date From
+                            <br />
+                            <input type="date" class="form-control" ng-model="ObjectSearch.DateFrom" ng-blur="Search()">
+                        </div>
+                        <div class="col-md-2">
+                            Date To
+                            <br />
+                            <input type="date" class="form-control" ng-model="ObjectSearch.DateTo" ng-blur="Search()">
+                        </div>
+                        <div class="col-md-12" style="text-align: center">
+                            <br />
+                            <button type="submit" class="btn btn-success" ng-click="Search()">Search</button>
+                            <button type="submit" class="btn btn-success" ng-click="Print()">Print Report</button>
+                        </div>
+                    </div>
+                    <br />
+                    <div id="divPrint" ng-show="List.length> 0">
+                        <div ng-hide="true">
+                            <img src="/Template/logo.png" />
+                            <br /><br />
+                            <span style="font-size:large;font-weight:bold">Sales Report</span>
+                            <br /><br />                            
+                            From Date: {{ObjectSearch.DateFrom!=null?ObjectSearch.DateFrom:'From Beginning'}} | To Date: {{ObjectSearch.DateTo!=null?ObjectSearch.DateTo:'Till Now'}}
+                            <br /><br />
+                            Sales Type: {{ObjectSearch.SalesType!=null?ObjectSearch.SalesType.Title:'All'}} |
+                            <br /><br />
+                            Account: {{ObjectSearch.MainAcc!=null?ObjectSearch.MainAcc.Name:'All'}} |
+                            SubAccount: {{ObjectSearch.SubAcc!=null?ObjectSearch.SubAcc.Name:'All'}}
+                            <br /><br />
+                              Airline: {{ObjectSearch.Airline!=null?ObjectSearch.Airline.Name:'All'}} |
+                            Ticket Number: {{ObjectSearch.TicketNumber!=null?ObjectSearch.TicketNumber:'All'}} |
+                            Issued By: {{ObjectSearch.Staff!=null?ObjectSearch.Staff.Name:'All'}}
+                            <br /><br />
+                        </div>
+                        <div class="alert alert-info">
+                            <ul class="fa-ul">
+                                <li>
+                                    <i class="fa fa-info-circle fa-lg fa-li fa-2x"></i>  <code>Total Tickets : {{List.length}}</code>
+                                </li>
+                            </ul>
+                        </div>
+                        <table class="table table-striped table-bordered"  border="1" cellpadding="0" cellspacing="0">
+                            <thead>
+                                <tr style="background-color: #007bb7; color: white">
+                                    <th width="10px" class="text-center">Type</th>
+                                    <th width="10px" class="text-center">AirLine</th>
+                                    <th width="10px" class="text-center">T/V Number</th>
+                                    <th width="10px" class="text-center">PaxName</th>
+                                    <th width="10px" class="text-center" ng-if="ObjectSearch.SubAcc == null || ObjectSearch.SubAcc.ID == null">Vendor</th>
+                                    <th width="10px" class="text-center">Payment</th>
+                                    <th width="10px" class="text-center">Fare</th>
+                                    <th width="10px" class="text-center">Tax</th>
+                                    <th width="10px" class="text-center">Commission</th>
+                                    <th width="10px" class="text-center">Cost</th>
+                                    <th width="10px" class="text-center">Sales</th>
+                                    <th width="10px" class="text-center">Profit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in List">
+                                    <td width="10px" class="text-center">{{item.SalesTypeTitle}}</td>
+                                    <td width="10px" class="text-center">{{item.AirlineCode}} - {{item.AirlineName}}</td>
+                                    <td width="10px" class="text-center">{{item.TicketNumber }}</td>
+                                    <td width="10px" class="text-center" >{{item.PaxName}}</td>
+                                    <td width="10px" class="text-center" ng-if="ObjectSearch.SubAcc == null || ObjectSearch.SubAcc.ID == null">{{item.VendorName}}</td>
+                                    <td width="10px" class="text-center">{{item.PaymentMethodTitle}}</td>
+                                    <td width="10px" class="text-center">{{item.Fare}}</td>
+                                    <td width="10px" class="text-center">{{item.Tax}}</td>
+                                    <td width="10px" class="text-center">{{item.Commision}}</td>
+                                    <td width="10px" class="text-center">{{item.TotalCost}}</td>
+                                    <td width="10px" class="text-center">{{item.SalesAmount}}</td>
+                                    <td width="10px" class="text-center">{{item.Profit}}</td>
+                                </tr>
+                            </tbody>
+                            <thead>
+                                <tr style="color: #fff; background-color:#007bb7;">
+                                    <th class="text-center" colspan="{{colspanValue}}">Total</th>
+                                    <th class="text-center">{{List  | sumByKey:'Fare'}}</th>
+                                    <th class="text-center">{{List  | sumByKey:'Tax'}}</th>
+                                    <th class="text-center">{{List  | sumByKey:'Commision'}}</th>
+                                    <th class="text-center">{{List  | sumByKey:'TotalCost'}}</th>
+                                    <th class="text-center">{{List  | sumByKey:'SalesAmount'}}</th>
+                                    <th class="text-center">{{List  | sumByKey:'Profit'}}</th>
+                                </tr>
+                                </thead>
+                           </table>
+                    </div>
+                    <div class="x_content" ng-show="List.length==0">
+                        <div class="alert alert-info alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Empty!</strong> No result matches your search.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,153 @@
+﻿<div class="page-title">
+    <div class="title_left">
+        <h3>Lookup Management</h3>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="row">
+    <div class="col-md-6 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Add/Update <small>From here you can add new Lookup or update exists Lookup</small></h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <br />
+                <form class="form-horizontal form-label-left input_mask" name="FormMain" novalidate accessible-form>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                            Lookup Title
+                            <span style="color: red">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control has-feedback-left" ng-model="Object.Title" required name="Title">
+                            <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                            <span style="color: red" ng-show="FormMain.$submitted && FormMain.Title.$error.required">Required</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                            Lookup Type
+                            <span style="color: red">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <!--<select class="form-control" ng-model="Object.LookupTypeID" ng-options="item.ID as item.Title for item in LookupTypes"></select>-->
+
+                            <ui-select ng-model="Object.LookupType" theme="selectize" title="Choose a type" style="width:100%" ng-required="true" name="LookupTypeID">
+                                <ui-select-match placeholder="Search lookupTypes">{{$select.selected.Title}}</ui-select-match>
+                                <ui-select-choices repeat="item in LookupTypes | propsFilter: {Title: $select.search}">
+                                    <div ng-bind-html="item.Title | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span style="color: red" ng-show="FormMain.$submitted && FormMain.LookupTypeID.$error.required">Required</span>
+                        </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group" style="text-align: center">
+                        <button type="submit" class="btn btn-success" ng-click="Submit()">Submit</button>
+                        <button class="btn btn-primary" type="reset" ng-click="Reset()">Reset</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Listing <small>List all Lookups ordered by date descending</small></h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <form class="form-horizontal form-label-left input_mask" name="FormSearch" novalidate>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                            Lookup Title
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control has-feedback-left" ng-model="ObjectSearch.Title" required name="Title">
+                            <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                            Lookup Type
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <ui-select ng-model="ObjectSearch.LookupType" theme="selectize" title="Choose a type" style="width:100%" ng-required="true" name="SearchLookupTypeID">
+                                <ui-select-match placeholder="Search lookupTypes">{{$select.selected.Title}}</ui-select-match>
+                                <ui-select-choices repeat="item in LookupTypes | propsFilter: {Title: $select.search}">
+                                    <div ng-bind-html="item.Title | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                            Is Deleted
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="checkbox" ng-model="ObjectSearch.IsDeleted" class="checkbox" />
+                        </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group" style="text-align: center">
+                        <button type="submit" class="btn btn-success" ng-click="Select(1)">Search</button>
+                    </div>
+                </form>
+                <br />
+                <div class="x_content" ng-show="List.length!=0">
+                    <table id="datatable" class="table table-striped table-bordered">
+                        <thead>
+                            <tr style="background-color:#007bb7;color:white">
+                                <th>ID</th>
+                                <th>Title</th>
+                                <th>Is Deleted</th>
+                                <th>Creation Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in List">
+                                <td>{{x.ID}}</td>
+                                <td>
+                                    {{x.Title}}
+                                    <span class="badge bg-green">{{x.Lookups}}</span>
+                                </td>
+                                <td>{{x.IsDeleted == false? 'No' : 'Yes'}}</td>
+                                <td>{{x.CreationDate}}</td>
+                                <td>
+                                    <a href="" ng-click="Update(x.ID)"><span class="label label-info">Update</span></a>
+                                    <a href="" ng-click="Delete(x.ID)" ng-hide="x.IsDeleted == true"><span class="label label-danger">Delete</span></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="col-md-12">
+                        <uib-pagination ng-model="CurrentPage"
+                                        ng-change="Select(CurrentPage)"
+                                        items-per-page="PageSize"
+                                        total-items="totalItems"
+                                        max-size="5"
+                                        class="pagination-sm"
+                                        next-text="Next"
+                                        previous-text="Previous"
+                                        last-text="Last"
+                                        first-text="First"
+                                        force-ellipses="true"
+                                        boundary-links="true"
+                                        rotate="false">
+                        </uib-pagination>
+                        <div style="margin-top: -22px" class="dataTables_info" id="example2_info" role="status" aria-live="polite">Page {{CurrentPage}} From {{totalPages}} Pages</div>
+                    </div>
+                </div>
+                <div class="x_content" ng-show="List.length==0">
+                    <div class="alert alert-info alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                        </button>
+                        <strong>Empty!</strong> No result matches your search.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

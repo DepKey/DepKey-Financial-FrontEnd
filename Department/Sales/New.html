@@ -1,0 +1,860 @@
+﻿<style>
+    .UpdatedField {
+        background-color: yellow !important;
+        color: black;
+    }
+</style>
+<div class="page-title hidden-print">
+    <div class="title_left">
+        <h3>{{PageTitle}}</h3>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="row hidden-print">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Add/Update <small>From here you can add new Sale or update exists Sale</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="#">Settings 1</a>
+                            </li>
+                            <li>
+                                <a href="#">Settings 2</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <br />
+                <form class="form-horizontal form-label-left input_mask" name="FormMain" novalidate accessible-form>
+                    <div ng-show="!hideForm">
+                        <fieldset ng-disabled="Details">
+                            <div class="row" ng-if="InvoiceNumberPNR">
+                                <div class="form-group col-md-6">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Invoice Number
+                                    </label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="text" class="form-control has-feedback-left" ng-model="InvoiceNumberPNR" ng-disabled="true">
+                                        <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Issued By
+                                        <span style="color: red">*</span>
+                                    </label>
+                                    <div ng-class="UpdatedObject != null && UpdatedObject.CreatedStaffID != Object.CreatedStaffID?'col-md-5 col-sm-5 col-xs-12':'col-md-9 col-sm-9 col-xs-12'">
+                                        <ui-select ng-disabled="Details" ng-model="Object.CreatedStaff" theme="selectize" title="Choose a person" style="width:100%" ng-required="true" name="CreatedStaffID">
+                                            <ui-select-match placeholder="Search Staff">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="item in StaffList | propsFilter: {Name: $select.search}">
+                                                <div ng-bind-html="item.Name | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span style="color: red" ng-show="FormMain.$submitted && FormMain.CreatedStaffID.$error.required">Required</span>
+                                    </div>
+                                    <div ng-show="UpdatedObject != null && UpdatedObject.CreatedStaffID != Object.CreatedStaffID" class="col-md-4 col-sm-9 col-xs-12">
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.CreatedName" type="text">
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Sale Date
+                                        <span style="color: red">*</span>
+                                    </label>
+                                    <div ng-class="UpdatedObject != null && UpdatedObject.CreationDate != Object.CreationDate?'col-md-5 col-sm-5 col-xs-12':'col-md-9 col-sm-9 col-xs-12'">
+                                        <input ng-disabled="!Updated || New" type="date" class="form-control has-feedback-left" ng-model="Object.JournalDate" required name="JournalDate" data-date-format="DD MMMM YYYY">
+                                        <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                                        <span style="color: red" ng-show="FormMain.$submitted && FormMain.JournalDate.$error.required">Required</span>
+                                    </div>
+
+                                    <div ng-show="UpdatedObject != null && UpdatedObject.CreationDate != Object.CreationDate" class="col-md-4 col-sm-9 col-xs-12" >
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.CreationDate" name="JournalDate" data-date-format="DD MMMM YYYY">
+                                        <span class="form-control-feedback " aria-hidden="true"></span>
+                                    </div>
+
+                                    <!--<div ng-show="UpdatedObject != null && UpdatedObject.CreationDate != Object.CreationDate" class="col-md-4 col-sm-9 col-xs-12">
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.CreationDate" type="text">
+                                    </div>-->
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Sales Type
+                                        <span style="color: red">*</span>
+                                    </label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <ui-select ng-disabled="Details || Updated" ng-model="Object.SalesType" theme="selectize" title="Choose a Sale type" style="width:100%" ng-required="true" name="SalesTypeID" ng-change="loadVendor(Object.SalesType.ID)">
+                                            <ui-select-match placeholder="Search Sales Type">{{$select.selected.Title}}</ui-select-match>
+                                            <ui-select-choices repeat="item in SalesTypeList | propsFilter: {Title: $select.search}">
+                                                <div ng-bind-html="item.Title | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span style="color: red" ng-show="FormMain.$submitted && FormMain.SalesTypeID.$error.required">Required</span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        T / V No
+                                        <span style="color: red">*</span>
+                                    </label>
+                                    <div ng-class="UpdatedObject != null && UpdatedObject.TicketNumber != Object.TicketNumber?'col-md-5 col-sm-5 col-xs-12':'col-md-9 col-sm-9 col-xs-12'">
+                                        <input class="form-control has-feedback-left" ng-model="Object.TicketNumber" type="text" required name="TicketNumber">
+                                        <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                                        <span style="color: red" ng-show="FormMain.$submitted && FormMain.TicketNumber.$error.required">Required</span>
+                                    </div>
+                                    <div ng-show="UpdatedObject != null && UpdatedObject.TicketNumber != Object.TicketNumber" class="col-md-4 col-sm-9 col-xs-12">
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.TicketNumber" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6" ng-if="Object.SalesTypeID == 25 ||Object.SalesTypeID == 49 || Object.SalesTypeID == 27">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Airline Code
+                                        <span style="color: red">*</span>
+                                    </label>
+                                    <div ng-class="UpdatedObject != null && UpdatedObject.AirlineID != Object.AirlineID?'col-md-5 col-sm-5 col-xs-12':'col-md-9 col-sm-9 col-xs-12'">
+                                        <ui-select ng-disabled="Details" ng-model="Object.Airline" theme="selectize" title="Choose an Airline" style="width:100%" ng-required="true" name="AirlineCode">
+                                            <ui-select-match placeholder="Search Airlines Code">{{$select.selected.Code}}</ui-select-match>
+                                            <ui-select-choices repeat="item in AirlinesList | propsFilter: {Code: $select.search}">
+                                                <div ng-bind-html="item.Code | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span style="color: red" ng-show="FormMain.$submitted && FormMain.AirlineCode.$error.required">Required</span>
+                                    </div>
+                                    <div ng-show="UpdatedObject != null && UpdatedObject.AirlineID != Object.AirlineID" class="col-md-4 col-sm-9 col-xs-12">
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.AirlineCode" type="text">
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6" ng-if="Object.SalesTypeID == 25 ||Object.SalesTypeID == 49 || Object.SalesTypeID == 27">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Airline Name
+                                        <span style="color: red">*</span>
+                                    </label>
+                                    <div ng-class="UpdatedObject != null && UpdatedObject.AirlineID != Object.AirlineID?'col-md-5 col-sm-5 col-xs-12':'col-md-9 col-sm-9 col-xs-12'">
+                                        <ui-select ng-disabled="Details" ng-model="Object.Airline" theme="selectize" title="Choose an Airline" style="width:100%" ng-required="true" name="AirlineID">
+                                            <ui-select-match placeholder="Search Airlines Name">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="item in AirlinesList | propsFilter: {Name: $select.search}">
+                                                <div ng-bind-html="item.Name | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span style="color: red" ng-show="FormMain.$submitted && FormMain.AirlineID.$error.required">Required</span>
+                                    </div>
+                                    <div ng-show="UpdatedObject != null && UpdatedObject.AirlineID != Object.AirlineID" class="col-md-4 col-sm-9 col-xs-12">
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.AirlineName" type="text">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Main Account
+                                        <span style="color: red">*</span>
+                                    </label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input class="form-control has-feedback-left" ng-model="Object.MainAccountName" type="text" required name="MainAccountName" ng-disabled="true">
+                                        <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                                        <span style="color: red" ng-show="FormMain.$submitted && FormMain.MainAccountName.$error.required">Required</span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6" ng-if="NotForBSP">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Sub Account
+                                        <span style="color: red">*</span>
+                                    </label>
+                                    <div ng-if="NotForBSP" ng-class="UpdatedObject != null && UpdatedObject.SubAccountID != Object.SubAccountID?'col-md-5 col-sm-5 col-xs-12':'col-md-9 col-sm-9 col-xs-12'">
+                                        <ui-select ng-disabled="Details" ng-model="Object.SubAccount" theme="selectize" title="Choose a Sub-Account" style="width:100%" ng-required="true" name="SubAccountID">
+                                            <ui-select-match placeholder="Search SubAccounts">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="item in SubAccountsList | propsFilter: {Name: $select.search}">
+                                                <div ng-bind-html="item.Name | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span style="color: red" ng-show="FormMain.$submitted && FormMain.SubAccountID.$error.required">Required</span>
+                                    </div>
+                                    <div ng-show="UpdatedObject != null && UpdatedObject.SubAccountID != Object.SubAccountID" ng-class="Object.SubAccountID  == null? 'col-md-9 col-sm-9 col-xs-12':'col-md-4 col-sm-9 col-xs-12'">
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.SubAccountName" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        DK Number
+                                       
+                                    </label>
+                                    <div ng-class="UpdatedObject != null && UpdatedObject.DKNumber != Object.DKNumber?'col-md-5 col-sm-5 col-xs-12':'col-md-9 col-sm-9 col-xs-12'">
+                                        <input class="form-control has-feedback-left" ng-model="Object.DKNumber" type="number"  name="DKNumber">
+                                        <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                                    </div>
+                                    <div ng-show="UpdatedObject != null && UpdatedObject.DKNumber != Object.DKNumber" class="col-md-4 col-sm-9 col-xs-12">
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.DKNumber" type="text">
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6" ng-if="Object.SalesTypeID == 25 ||Object.SalesTypeID == 49 || Object.SalesTypeID == 27">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        PNR
+                                    </label>
+                                    <div ng-class="UpdatedObject != null && UpdatedObject.PNR != Object.PNR?'col-md-5 col-sm-5 col-xs-12':'col-md-9 col-sm-9 col-xs-12'">
+                                        <input class="form-control has-feedback-left" ng-model="Object.PNR" type="text" name="PNR">
+                                        <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                                    </div>
+                                    <div ng-show="UpdatedObject != null && UpdatedObject.PNR != Object.PNR" class="col-md-4 col-sm-9 col-xs-12">
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.PNR" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ln_solid">
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Payment Method
+                                        <span style="color: red">*</span>
+                                    </label>
+                                    <div ng-class="UpdatedObject != null && UpdatedObject.PaymentMethodID != Object.PaymentMethodID?'col-md-5 col-sm-5 col-xs-12':'col-md-9 col-sm-9 col-xs-12'">
+                                        <ui-select ng-disabled="Details" ng-model="Object.PaymentMethod" ng-change="loadRealtedItems(Object.PaymentMethod.ID,false)" theme="selectize" title="Choose a PaymentMethod" style="width:100%" ng-required="true" name="PaymentMethodID">
+                                            <ui-select-match placeholder="Search Payment Method">{{$select.selected.Title}}</ui-select-match>
+                                            <ui-select-choices repeat="item in PaymentMethodsList | propsFilter: {Title: $select.search}">
+                                                <div ng-bind-html="item.Title | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span style="color: red" ng-show="FormMain.$submitted && FormMain.PaymentMethodID.$error.required">Required</span>
+                                    </div>
+                                    <div ng-show="UpdatedObject != null && UpdatedObject.PaymentMethodID != Object.PaymentMethodID" class="col-md-4 col-sm-9 col-xs-12">
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.PaymentMethodTitle" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                </div>
+                            </div>
+                            <div class="row" ng-if="Object.PaymentMethodID == 19 || (UpdatedObject != null && UpdatedObject.PaymentMethodID == 19)">
+                                <div class="form-group col-md-6">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Main Account
+                                        <span style="color: red">*</span>
+                                    </label>
+                                    <div ng-if="Object.PaymentMethodID == 19" ng-class="UpdatedObject != null && UpdatedObject.RecievableMainAccountID != Object.RecievableMainAccountID?'col-md-5 col-sm-5 col-xs-12':'col-md-9 col-sm-9 col-xs-12'">
+                                        <ui-select ng-disabled="Details" ng-model="Object.RecievableMainAccount" ng-change="loadRecievableSubAccounts(Object.RecievableMainAccount.ID)" theme="selectize" title="Choose a Recievable Account" style="width:100%" ng-required="true" name="RecievableMainAccountID">
+                                            <ui-select-match placeholder="Search Main Account">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="item in RecievableMainAccountList | propsFilter: {Name: $select.search}">
+                                                <div ng-bind-html="item.Name | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span style="color: red" ng-show="FormMain.$submitted && FormMain.RecievableMainAccountID.$error.required">Required</span>
+                                    </div>
+                                    <div ng-show="UpdatedObject != null && UpdatedObject.RecievableMainAccountID != Object.RecievableMainAccountID" ng-class="Object.RecievableMainAccountID  == null? 'col-md-9 col-sm-9 col-xs-12':'col-md-4 col-sm-9 col-xs-12'">
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.RecievableMainAccountName" type="text">
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Sub Account
+                                        <span style="color: red">*</span>
+                                    </label>
+                                    <div ng-if="Object.PaymentMethodID == 19" ng-class="UpdatedObject != null && UpdatedObject.CreditAccountID != Object.CreditAccountID?'col-md-5 col-sm-5 col-xs-12':'col-md-9 col-sm-9 col-xs-12'">
+                                        <ui-select ng-disabled="recievableSubaccountsDisabled || Details" ng-model="Object.CreditAccount" theme="selectize" title="Choose a Recievable Sub Account" style="width:100%" ng-required="true" name="CreditAccountID">
+                                            <ui-select-match placeholder="Search Sub Account">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="item in RecievableSubAccountList | propsFilter: {Name: $select.search}">
+                                                <div ng-bind-html="item.Name | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <span style="color: red" ng-show="FormMain.$submitted && FormMain.CreditAccountID.$error.required">Required</span>
+                                    </div>
+                                    <div ng-show="UpdatedObject != null && UpdatedObject.CreditAccountID != Object.CreditAccountID" ng-class="Object.CreditAccountID  == null? 'col-md-9 col-sm-9 col-xs-12':'col-md-4 col-sm-9 col-xs-12'">
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.CreditAccountName" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" ng-if="Object.PaymentMethodID == 24 || (UpdatedObject != null && UpdatedObject.PaymentMethodID == 24)">
+                                <div class="form-group col-md-6">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Main Account
+                                    </label>
+                                    <div ng-if="Object.PaymentMethodID == 24" ng-class="UpdatedObject != null && UpdatedObject.RecievableMainAccountID != Object.RecievableMainAccountID?'col-md-5 col-sm-5 col-xs-12':'col-md-9 col-sm-9 col-xs-12'">
+                                        <ui-select ng-disabled="Details" ng-model="Object.RecievableMainAccount" ng-change="loadRecievableSubAccounts(Object.RecievableMainAccount.ID)" theme="selectize" title="Choose a Recievable Account" style="width:100%" ng-required="true" name="RecievableMainAccountID">
+                                            <ui-select-match placeholder="Search Main Account">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="item in RecievableMainAccountList | propsFilter: {Name: $select.search}">
+                                                <div ng-bind-html="item.Name | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                    <div ng-show="UpdatedObject != null && UpdatedObject.RecievableMainAccountID != Object.RecievableMainAccountID" ng-class="Object.RecievableMainAccountID  == null? 'col-md-9 col-sm-9 col-xs-12':'col-md-4 col-sm-9 col-xs-12'">
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.RecievableMainAccountName" type="text">
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Sub Account
+                                    </label>
+                                    <div ng-if="Object.PaymentMethodID == 24" ng-class="UpdatedObject != null && UpdatedObject.CreditAccountID != Object.CreditAccountID?'col-md-5 col-sm-5 col-xs-12':'col-md-9 col-sm-9 col-xs-12'">
+                                        <ui-select ng-disabled="recievableSubaccountsDisabled || Details" ng-model="Object.CreditAccount" theme="selectize" title="Choose a Recievable Sub Account" style="width:100%" ng-required="true" name="CreditAccountID">
+                                            <ui-select-match placeholder="Search Sub Account">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="item in RecievableSubAccountList | propsFilter: {Name: $select.search}">
+                                                <div ng-bind-html="item.Name | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                    <div ng-show="UpdatedObject != null && UpdatedObject.CreditAccountID != Object.CreditAccountID" ng-class="Object.CreditAccountID  == null? 'col-md-9 col-sm-9 col-xs-12':'col-md-4 col-sm-9 col-xs-12'">
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.CreditAccountName" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6" ng-if="Object.PaymentMethodID == 18 ||Object.PaymentMethodID == 20 || Object.PaymentMethodID == 24">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Bank Account
+                                        <span style="color: red">*</span>
+                                    </label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <select class="form-control" ng-model="Object.BankAccountID" ng-options="item.ID as item.Name for item in BankAccountsList" name="BankAccountID" required disabled></select>
+                                        <span style="color: red" ng-show="FormMain.$submitted && FormMain.BankAccountID.$error.required">Required</span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6" ng-if="Object.PaymentMethodID == 18 ||Object.PaymentMethodID == 20 ||Object.PaymentMethodID == 24">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Bank Number
+                                        <span style="color: red">*</span>
+                                    </label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <select ng-disabled="true" class="form-control" ng-model="Object.BankAccountID" ng-options="item.ID as item.AccountNumber for item in BankAccountsList" name="BankAccountID" required></select>
+                                        <span style="color: red" ng-show="FormMain.$submitted && FormMain.BankAccountID.$error.required">Required</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6" ng-if="UpdatedObject != null && UpdatedObject.PaymentMethodID != Object.PaymentMethodID   &&(UpdatedObject.PaymentMethodID == 18 ||UpdatedObject.PaymentMethodID == 20 || UpdatedObject.PaymentMethodID == 24)">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Bank Account
+                                    </label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <select class="form-control UpdatedField" ng-model="UpdatedObject.BankAccountID" ng-options="item.ID as item.Name for item in BankAccountsList" name="BankAccountID" required disabled></select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6" ng-if="UpdatedObject != null  && UpdatedObject.PaymentMethodID != Object.PaymentMethodID  &&(UpdatedObject.PaymentMethodID == 18 ||UpdatedObject.PaymentMethodID == 20 || UpdatedObject.PaymentMethodID == 24)">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Bank Number
+                                    </label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <select ng-disabled="true" class="form-control UpdatedField" ng-model="UpdatedObject.BankAccountID" ng-options="item.ID as item.AccountNumber for item in BankAccountsList" name="BankAccountID" required></select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Fare
+                                    </label>
+                                    <div ng-class="UpdatedObject != null && UpdatedObject.Fare != Object.Fare?'col-md-5 col-sm-5 col-xs-12':'col-md-9 col-sm-9 col-xs-12'">
+                                        <input class="form-control has-feedback-left" ng-model="Object.Fare" type="number" name="Fare" ng-blur="calculatePayment()" ng-disabled="!selectedPayementMethod" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
+                                        <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                                    </div>
+                                    <div ng-show="UpdatedObject != null && UpdatedObject.Fare != Object.Fare" class="col-md-4 col-sm-9 col-xs-12">
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.Fare" type="text" >
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Tax
+                                    </label>
+                                    <div ng-class="UpdatedObject != null && UpdatedObject.Tax != Object.Tax?'col-md-5 col-sm-5 col-xs-12':'col-md-9 col-sm-9 col-xs-12'">
+                                        <input class="form-control has-feedback-left" ng-model="Object.Tax" type="number" name="Tax" ng-blur="calculatePayment()" ng-disabled="!selectedPayementMethod" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
+                                        <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                                    </div>
+                                    <div ng-show="UpdatedObject != null && UpdatedObject.Tax != Object.Tax" class="col-md-4 col-sm-9 col-xs-12">
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.Tax" type="number">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Commision
+                                    </label>
+                                    <div ng-class="UpdatedObject != null && UpdatedObject.Commision != Object.Commision?'col-md-5 col-sm-5 col-xs-12':'col-md-9 col-sm-9 col-xs-12'">
+                                        <input class="form-control has-feedback-left" ng-model="Object.Commision" type="number" name="Commision" ng-blur="calculatePayment()" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
+                                        <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                                        <span style="color:green;font-size:11px">{{CommisionAmount}}</span>
+                                    </div>
+                                    <div ng-show="UpdatedObject != null && UpdatedObject.Commision != Object.Commision" class="col-md-4 col-sm-9 col-xs-12">
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.Commision" type="number">
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Total Cost
+                                    </label>
+                                    <div ng-class="UpdatedObject != null && UpdatedObject.TotalCost != Object.TotalCost?'col-md-5 col-sm-5 col-xs-12':'col-md-9 col-sm-9 col-xs-12'">
+                                        <input class="form-control has-feedback-left" ng-model="Object.TotalCost" type="number" name="TotalCost" ng-disabled="true">
+                                        <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                                    </div>
+                                    <div ng-show="UpdatedObject != null && UpdatedObject.TotalCost != Object.TotalCost" class="col-md-4 col-sm-9 col-xs-12">
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.TotalCost" type="number">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Sales Amount
+                                    </label>
+                                    <div ng-class="UpdatedObject != null && UpdatedObject.SalesAmount != Object.SalesAmount?'col-md-5 col-sm-5 col-xs-12':'col-md-9 col-sm-9 col-xs-12'">
+                                        <input class="form-control has-feedback-left" ng-model="Object.SalesAmount" type="number" name="SalesAmount" ng-blur="calculatePayment()" required ng-disabled="!selectedPayementMethod">
+                                        <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                                    </div>
+                                    <div ng-show="UpdatedObject != null && UpdatedObject.SalesAmount != Object.SalesAmount" class="col-md-4 col-sm-9 col-xs-12">
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.SalesAmount" type="text">
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Profit
+                                    </label>
+                                    <div ng-class="UpdatedObject != null && UpdatedObject.Profit != Object.Profit?'col-md-5 col-sm-5 col-xs-12':'col-md-9 col-sm-9 col-xs-12'">
+                                        <input class="form-control has-feedback-left" ng-model="Object.Profit" type="number" name="Profit" ng-disabled="true" ng-style="profitStyle">
+                                        <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                                    </div>
+                                    <div ng-show="UpdatedObject != null && UpdatedObject.Profit != Object.Profit" class="col-md-4 col-sm-9 col-xs-12">
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.Profit" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ln_solid">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div ng-class="UpdatedObject != null && UpdatedObject.Cash != Object.Cash?'col-md-6 col-sm-6 col-xs-12':'col-md-12 col-sm-12 col-xs-12'">
+                                        Cash
+                                        <br />
+                                        <input ng-model="Object.Cash" class="form-control" type="number" name="Cash" ng-blur="checkAdvanceBalanceEqualityForSalesAmountAndPaymentMerthods()" ng-disabled="NotMiscellaneous">
+
+                                    </div>
+                                    <div ng-show="UpdatedObject != null && UpdatedObject.Cash != Object.Cash" class="col-md-6 col-sm-6 col-xs-12" style="padding-top:18PX">
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.Cash" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div ng-class="UpdatedObject != null && UpdatedObject.Credit != Object.Credit?'col-md-6 col-sm-6 col-xs-12':'col-md-12 col-sm-12 col-xs-12'">
+                                        Credit
+                                        <br />
+                                        <input ng-model="Object.Credit" class="form-control" type="number" name="Credit" ng-blur="checkAdvanceBalanceEqualityForSalesAmountAndPaymentMerthods()" ng-disabled="NotMiscellaneous">
+
+                                    </div>
+                                    <div ng-show="UpdatedObject != null && UpdatedObject.Credit != Object.Credit" class="col-md-6 col-sm-6 col-xs-12" style="padding-top:18PX">
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.Credit" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div ng-class="UpdatedObject != null && UpdatedObject.Card != Object.Card?'col-md-6 col-sm-6 col-xs-12':'col-md-12 col-sm-12 col-xs-12'">
+                                        Card
+                                        <br />
+                                        <input ng-model="Object.Card" class="form-control" type="number" name="Card" ng-blur="checkAdvanceBalanceEqualityForSalesAmountAndPaymentMerthods()" ng-disabled="NotMiscellaneous">
+
+                                    </div>
+                                    <div ng-show="UpdatedObject != null && UpdatedObject.Card != Object.Card" class="col-md-6 col-sm-6 col-xs-12" style="padding-top:18PX">
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.Card" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div ng-class="UpdatedObject != null && UpdatedObject.Visa != Object.Visa?'col-md-6 col-sm-6 col-xs-12':'col-md-12 col-sm-12 col-xs-12'">
+                                        Visa
+                                        <br />
+                                        <input ng-model="Object.Visa" class="form-control" type="number" name="Visa" ng-blur="checkAdvanceBalanceEqualityForSalesAmountAndPaymentMerthods()" ng-disabled="NotMiscellaneous">
+
+                                    </div>
+                                    <div ng-show="UpdatedObject != null && UpdatedObject.Visa != Object.Visa" class="col-md-6 col-sm-6 col-xs-12" style="padding-top:18PX">
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.Visa" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div ng-class="UpdatedObject != null && UpdatedObject.Complementary != Object.Complementary?'col-md-6 col-sm-6 col-xs-12':'col-md-12 col-sm-12 col-xs-12'">
+                                        Complementary
+                                        <br />
+                                        <input ng-model="Object.Complementary" class="form-control" type="number" name="Complementary" ng-blur="checkAdvanceBalanceEqualityForSalesAmountAndPaymentMerthods()" ng-disabled="NotMiscellaneous">
+
+                                    </div>
+                                    <div ng-show="UpdatedObject != null && UpdatedObject.Complementary != Object.Complementary" class="col-md-6 col-sm-6 col-xs-12" style="padding-top:18PX">
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.Complementary" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div ng-class="UpdatedObject != null && UpdatedObject.Advance != Object.Advance?'col-md-6 col-sm-6 col-xs-12':'col-md-12 col-sm-12 col-xs-12'">
+                                        Advance
+                                        <br />
+                                        <input ng-model="Object.Advance" class="form-control" type="number" name="Advance" ng-blur="checkAdvanceBalanceEqualityForSalesAmountAndPaymentMerthods()" ng-disabled="NotMiscellaneous">
+
+                                    </div>
+                                    <div ng-show="UpdatedObject != null && UpdatedObject.Advance != Object.Advance" class="col-md-6 col-sm-6 col-xs-12" style="padding-top:18PX">
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.Advance" type="text">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row" ng-if="checkAdvanceBalance || totalAmountBalance">
+                                <br />
+                                <br />
+                                <div class="alert alert-danger alert-dismissible fade in text-center" role="alert" ng-show="checkAdvanceBalance">
+                                    <strong>Alert!</strong> Not enough Balance From Advance Account!
+                                </div>
+                                <div class="alert alert-danger alert-dismissible fade in text-center" role="alert" ng-show="totalAmountBalance">
+                                    <strong>Alert!</strong> Total Amount From Differenct Payment Methods Amount  Must Equal  Sales Amount!
+                                </div>
+                            </div>
+                            <div class="ln_solid">
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Pax Name
+                                        <span style="color: red">*</span>
+                                    </label>
+                                    <div ng-class="UpdatedObject != null && UpdatedObject.PaxName != Object.PaxName?'col-md-5 col-sm-5 col-xs-12':'col-md-9 col-sm-9 col-xs-12'">
+                                        <input id="PaxName" class="form-control has-feedback-left" type="text" ng-model="Object.PaxName" required>
+                                        <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                                        <span style="color: red" ng-show="FormMain.$submitted && FormMain.PaxName.$error.required">Required</span>
+                                    </div>
+                                    <div ng-show="UpdatedObject != null && UpdatedObject.PaxName != Object.PaxName" class="col-md-4 col-sm-9 col-xs-12">
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.PaxName" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Remarks
+                                    </label>
+                                    <div ng-class="UpdatedObject != null && UpdatedObject.Remarks != Object.Remarks?'col-md-5 col-sm-5 col-xs-12':'col-md-9 col-sm-9 col-xs-12'">
+                                        <textarea id="Remarks" class="form-control has-feedback-left" type="text" ng-model="Object.Remarks" rows="4"></textarea>
+                                        <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                                    </div>
+                                    <div ng-show="UpdatedObject != null && UpdatedObject.Remarks != Object.Remarks" class="col-md-4 col-sm-9 col-xs-12">
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.Remarks" type="text">
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Destination
+                                        <span style="color: red">*</span>
+                                    </label>
+                                    <div ng-class="UpdatedObject != null && UpdatedObject.Destination != Object.Destination?'col-md-5 col-sm-5 col-xs-12':'col-md-9 col-sm-9 col-xs-12'">
+                                        <textarea id="Destination" class="form-control has-feedback-left" type="text" ng-model="Object.Destination" ng-required="true" rows="4"></textarea>
+                                        <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                                        <span style="color: red" ng-show="FormMain.$submitted && FormMain.Destination.$error.required">Required</span>
+                                    </div>
+                                    <div ng-show="UpdatedObject != null && UpdatedObject.Destination != Object.Destination" class="col-md-4 col-sm-9 col-xs-12">
+                                        <input class="form-control UpdatedField" ng-model="UpdatedObject.Destination" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" ng-show="Object.SalesStatusID == 7">
+                                <div class="ln_solid">
+                                </div>
+                                <p class="text-center" style="font-weight:bold; padding:1%; background-color:#007bb7; color:#fff;">Refund Details</p>
+                                <div class="col-md-6">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Amount From Provider
+                                    </label>
+                                    <div class="'col-md-9 col-sm-9 col-xs-12'">
+                                        <input id="PaxName" class="form-control has-feedback-left" type="text" ng-model="Object.RefAmountFromProvider">
+                                        <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Amount To Customer
+                                    </label>
+                                    <div class="'col-md-9 col-sm-9 col-xs-12'">
+                                        <input id="PaxName" class="form-control has-feedback-left" type="text" ng-model="Object.RefDescription">
+                                        <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div class="form-group" style="text-align: center">
+                            <div class="ln_solid">
+                            </div>
+                            <button type="submit" class="btn btn-success" ng-show="Object.ID == null" ng-click="Submit()" ng-disabled="disableSave">
+                                Submit
+                            </button>
+                            <button class="btn btn-primary" type="reset" ng-show="Object.ID == null" ng-click="Reset()">
+                                Reset
+                            </button>
+                            <button class="btn btn-success" ng-show="UserPermissions.indexOf('75') > -1 && Object.HistoryID == null && Object.SalesStatusID == 5" ng-click="Submit(Object.ID)">
+                                Update
+                            </button>
+                            <button class="btn btn-info" ng-show="UserPermissions.indexOf('74') > -1 && Object.HistoryID == null && Object.SalesStatusID == 5" ng-click="Void(Object.ID)">
+                                Void
+                            </button>
+                            <button class="btn btn-warning" ng-show="UserPermissions.indexOf('72') > -1 && Object.HistoryID == null && Object.SalesStatusID == 5" ng-click="Refund(Object.ID)">
+                                Refund
+                            </button>
+                            <button class="btn btn-danger" ng-show="UserPermissions.indexOf('73') > -1 && Object.HistoryID == null && Object.SalesStatusID == 5" ng-click="Delete(Object)">
+                                Delete
+                            </button>
+                            <button class="btn btn-success" ng-show="(UserPermissions. indexOf('82') > -1 && UpdatedObject.SalesStatusID == 95) || (UserPermissions.indexOf('83') > -1 && UpdatedObject.SalesStatusID == 87)  || (UserPermissions.indexOf('93') > -1 && UpdatedObject.SalesStatusID == 94)" ng-click="Approve(UpdatedObject)">
+                                Approve
+                            </button>
+                            <button class="btn btn-danger" ng-show="(UserPermissions.indexOf('82') >  -1 && UpdatedObject.SalesStatusID == 95)  || (UserPermissions.indexOf('83') > -1 && UpdatedObject.SalesStatusID == 87)  || (UserPermissions.indexOf('93') > -1 && UpdatedObject.SalesStatusID == 94)" ng-click="Reject(UpdatedObject)">
+                                Reject
+                            </button>
+                            <button class="btn btn-success" ng-click="PrintInvoice(Object)" ng-show="Object.SalesStatusID == 5">
+                                Print Invoice
+                            </button>
+                            <button class="btn btn-info" ng-click="Pay(Object.ID)" ng-show="Title == 'Refund Sales' && x.RefPaid != true">
+                                Pay
+                            </button>
+                            <button class="btn btn-info" ng-show="Title == 'Refund Sales' && Object.RefPaid == true">
+                                Paid
+                            </button>
+                            <a ng-show="(Object.HistoryID != null && Object.SalesStatusID == 5) || Title == 'Waiting Sales'"><br /><br /><span class="label label-primary">{{Object.SalesHistoryStatus}}</span></a>
+                        </div>
+                        <div ng-show="Object.SalesStatusID == 4">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <ui-select ng-model="TransferObject.SalesType" theme="selectize" title="Choose a Sale type" style="width:100%" name="SalesTypeID" ng-change="loadVendorTransfer(TransferObject.SalesType.ID)">
+                                        <ui-select-match placeholder="Search Sales Type">{{$select.selected.Title}}</ui-select-match>
+                                        <ui-select-choices repeat="item in SalesTypeListTransfer | propsFilter: {Title: $select.search}">
+                                            <div ng-bind-html="item.Title | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <div class="col-md-6">
+                                    <ui-select id="SubAccountControl" ng-model="TransferObject.SubAccount" theme="selectize" title="Choose a Sub-Account" style="width:100%" ng-disabled="!NotForBSP">
+                                        <ui-select-match placeholder="Search Vendor">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="item in SubAccountsList | propsFilter: {Name: $select.search}">
+                                            <div ng-bind-html="item.Name | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" class="btn btn-info btn-block" ng-click="Transfer(Object)" ng-disabled="(TransferObject.SubAccount == null && TransferObject.SalesType.ID != 25) || TransferObject.SalesType == null">Transfer</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="hideForm">
+                        <p><b>Invoice Number: {{InvoiceNumberPNR}}</b></p>
+                        <div class="col-md-3">
+                            <button ng-click="new()" class="btn btn-primary btn-block"><i class="fa fa-file"></i> New</button>
+                        </div>
+                        <div class="col-md-3">
+                            <button ng-click="newOnSameInvoice()" class="btn btn-primary btn-block"><i class="fa fa-copy"></i> New On Same Invoice</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="VoidModel" class="modal fade bs-example-modal-lg hidden-print" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg" style="margin-top:8%;" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form name="VoidForm" class="form-horizontal" novalidate>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Sale Void <small>From here you can Void Sale</small></h2>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <br />
+                                <div class="x_content">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                            Old Sale Amount
+                                            <span style="color: red">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <input disabled type="text" class="form-control has-feedback-left" ng-model="SlesObject.SalesAmount" required name="Amount" />
+                                            <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                                            <span style="color: red" ng-show="VoidForm.$submitted && FormMain.Amount.$error.required">Required</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                            Sale Charge
+                                            <span style="color: red">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <input type="number" min="0" class="form-control has-feedback-left" ng-model="NewObject.SalesAmount" required name="Amount" />
+                                            <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                                            <span style="color: red" ng-show="VoidForm.$submitted && FormMain.Amount.$error.required">Required</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <button type="button" data-dissmiss="modal" class="btn btn-success" ng-click="SaveVoid()">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="RefundModel" class="modal fade bs-example-modal-lg hidden-print" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg" style="margin-top:8%;" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form name="RefundForm" class="form-horizontal" novalidate>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Sale Refund <small>From here you can Refund Sale</small></h2>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <br />
+                                <div class="x_content">
+                                    <div class="form-group">
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <label class="control-label col-md-4 col-sm-2 col-xs-12">
+                                                Issued By
+                                                <span style="color: red">*</span>
+                                            </label>
+                                            <div class="col-md-8 col-sm-8 col-xs-12">
+                                                <ui-select ng-model="Object.CreatedStaff" theme="selectize" title="Choose a person" style="width:100%" ng-required="true" name="CreatedStaffID">
+                                                    <ui-select-match placeholder="Search on Staff list">{{$select.selected.Name}}</ui-select-match>
+                                                    <ui-select-choices repeat="item in StaffList | propsFilter: {Name: $select.search}">
+                                                        <div ng-bind-html="item.Name | highlight: $select.search"></div>
+                                                    </ui-select-choices>
+                                                </ui-select>
+                                                <span style="color: red" ng-show="RefundForm.$submitted && RefundForm.CreatedStaffID.$error.required">Required</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <label class="control-label col-md-4 col-sm-2 col-xs-12">
+                                                Refund Date
+                                                <span style="color: red">*</span>
+                                            </label>
+                                            <div class="col-md-8 col-sm-6 col-xs-12">
+                                                <input type="text" class="form-control" ng-model="Object.JournalDate" ng-disabled="true" required name="JournalDate">
+                                                <span style="color: red" ng-show="RefundForm.$submitted && RefundForm.JournalDate.$error.required">Required</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <label class="control-label col-md-4 col-sm-3 col-xs-12">
+                                                Amount To Customer
+                                                <span style="color: red">*</span>
+                                            </label>
+                                            <div class="col-md-8 col-sm-6 col-xs-12">
+                                                <textarea rows="1" class="form-control" ng-model="Object.RefDescription" required name="MovementDescription"></textarea>
+                                                <span style="color: red" ng-show="RefundForm.$submitted && RefundForm.MovementDescription.$error.required">Required</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <label class="control-label col-md-4 col-sm-2 col-xs-12">
+                                                Amount From Provider
+                                                <span style="color: red">*</span>
+                                            </label>
+                                            <div class="col-md-8 col-sm-6 col-xs-12">
+                                                <input class="form-control" ng-model="Object.RefSalesAmount" type="number" name="SalesAmount" required min="0">
+                                                <span style="color: red" ng-show="RefundForm.$submitted && RefundForm.SalesAmount.$error.required">Required</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" data-dissmiss="modal" class="btn btn-success" ng-click="SaveRefund()">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="content invoice visible-print-block">
+    <img src="/Template/logo.png" />
+    <div class="row">
+        <div class="col-xs-12 invoice-header">
+            <h1 class="text-center">
+                <br />
+                <i class="fa fa-globe"></i> Invoice: {{PrintSale.InvoiceNumberPNR}}
+            </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 invoice-info">
+            <strong>Date</strong>: {{PrintSale.CreationDate | date : 'M/d/yy'}}
+            <br /><br />
+            <strong>Branch</strong>: {{PrintSale.BranchName}} |
+            <strong>Accountant</strong>: {{PrintSale.AccountantName}} |
+            <strong>Issued By</strong>: {{PrintSale.CreatedName}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 table">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Pax Name</th>
+                        <th>Ticket/Vo</th>
+                        <th>Sales Type</th>
+                        <th style="width: 29%">Description</th>
+                        <th>Total Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="x in PrintList">
+                        <td>{{x.PaxName}}</td>
+                        <td>{{x.TicketNumber}}</td>
+                        <td> {{x.SalesTypeTitle}}</td>
+                        <td>{{x.Destination}} </td>
+                        <td> {{x.SalesAmount}} </td>
+                    </tr>
+                </tbody>
+                <thead>
+                    <tr>
+                        <td colspan="4" class="text-right">
+                            <b>
+                                Total Amount
+                            </b>
+                        </td>
+                        <td>
+                            {{TotalSalesAmount}}
+                        </td>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <!-- /.col -->
+    </div>
+    <div class="row">
+        <!-- accepted payments column -->
+        <div class="col-xs-6">
+            <p class="lead">Payment Methods:</p>
+            <strong>Cash</strong>: {{TotalPrintCash != null ? TotalPrintCash : '-' }}  |
+            <strong>Credit</strong>: {{TotalPrintCredit != null ? TotalPrintCredit : '-' }} |
+            <strong>Visa</strong>: {{TotalPrintVisa != null ? TotalPrintVisa : '-' }} |
+            <strong>Card</strong>: {{TotalPrintCard != null ? TotalPrintCard : '-' }} |
+            <strong>Advance</strong>: {{TotalPrintAdvance != null ? TotalPrintAdvance : '-' }} |
+            <strong>Complementary</strong>: {{TotalPrintComplementary != null ? TotalPrintComplementary : '-' }}
+        </div>
+        <!-- /.col -->
+        <!-- /.col -->
+    </div>
+</section>

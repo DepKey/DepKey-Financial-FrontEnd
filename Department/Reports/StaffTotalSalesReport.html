@@ -1,0 +1,124 @@
+﻿<div class="">
+    <div class="page-title">
+        <div class="title_left">
+            <h3>Staff Total Sales Report<small></small></h3>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Staff  Report <small>From here you can find total sales for everyone of  Staff </small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li>
+                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a href="#">Settings 1</a>
+                                </li>
+                                <li>
+                                    <a href="#">Settings 2</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="row">
+                        <div class="col-md-4">
+                            Staff
+                            <br />
+                            <ui-select ng-model="ObjectSearch.Staff" theme="selectize" title="Choose a person" style="width:100%" ng-required="true" name="CreatedStaffID" ng-change="Search()">
+                                <ui-select-match placeholder="Search Staff">{{$select.selected.Name}}</ui-select-match>
+                                <ui-select-choices repeat="item in StaffList | propsFilter: {Name: $select.search}">
+                                    <div ng-bind-html="item.Name | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+
+                        <div class="col-md-4">
+                            Date From
+                            <br />
+                            <input type="date" class="form-control" ng-model="ObjectSearch.DateFrom" ng-blur="Search()">
+                        </div>
+                        <div class="col-md-4">
+                            Date To
+                            <br />
+                            <input type="date" class="form-control" ng-model="ObjectSearch.DateTo" ng-blur="Search()">
+                        </div>
+                        <div class="col-md-12" style="text-align: center">
+                            <br />
+                            <button type="submit" class="btn btn-success" ng-click="Search()">Search</button>
+                            <button type="submit" class="btn btn-success" ng-click="Print()">Print Report</button>
+                        </div>
+                    </div>
+                    <br />
+                    <div id="divPrint" ng-show="List.length> 0">
+                        <div ng-hide="true">
+                            <img src="/Template/logo.png" />
+                            <br /><br />
+                            <span style="font-size:large;font-weight:bold">Staff Total Sales Report</span>
+                            <br /><br />
+                            From Date: {{ObjectSearch.DateFrom!=null?ObjectSearch.DateFrom:'From Beginning'}} | To Date: {{ObjectSearch.DateTo!=null?ObjectSearch.DateTo:'Till Now'}}
+                            <br /><br />
+                            Issued By: {{ObjectSearch.Staff!=null?ObjectSearch.Staff.Name:'All'}}
+                            <br /><br />
+                        </div>
+                        <table id="datatable" class="table table-striped table-bordered"  border="1" cellpadding="0" cellspacing="0" ng-if="List.length >0">
+                            <thead>
+                                <tr style="background-color: #007bb7; color: white">
+                                    <th class="text-center">Staff</th>
+                                    <th class="text-center"> Sales</th>
+                                    <th class="text-center">  Cost</th>
+                                    <th class="text-center"> Profit	</th>
+                                    <th class="text-center"> Refund In</th>
+                                    <th class="text-center"> Refund Out</th>
+                                    <th class="text-center"> Profit	with refund</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in List">
+                                    <td class="text-center">{{x.IsssuedByName}}</td>
+                                    <td class="text-center">{{x.SalesAmount  | RoundByKey : 'SalesAmount'}}</td>
+                                    <td class="text-center">{{x.TotalCost  | RoundByKey : 'TotalCost'}}</td>
+                                    <td class="text-center">{{x.Profit | RoundByKey : 'Profit'}}</td>
+                                    <td class="text-center">{{x.RefundCost | RoundByKey : 'RefundCost'}}</td>
+                                    <td class="text-center">{{x.RefundSales | RoundByKey : 'RefundSales'}}</td>
+                                    <td class="text-center">{{x.ProfitWithRefund | RoundByKey : 'ProfitWithRefund'}}</td>
+                                </tr>
+                            </tbody>
+                            <thead>
+                                <tr style="background-color: #b97126; color: white">
+                                    <th  class="text-center">Gross Total</th>
+                                    <td class="text-center">{{List |sumByKey:'SalesAmount'}}</td>
+                                    <td class="text-center">{{List |sumByKey:'TotalCost'}}</td>
+                                    <td class="text-center">{{List |sumByKey:'Profit'}}</td>
+                                    <td class="text-center">{{List |sumByKey:'RefundSales'}}</td>
+                                    <td class="text-center">{{List |sumByKey:'RefundCost'}}</td>
+                                    <td class="text-center">{{List |sumByKey:'ProfitWithRefund'}}</td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="x_content" ng-show="List.length==0">
+                        <div class="alert alert-info alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Empty!</strong> No result matches your search.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

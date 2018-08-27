@@ -1,7 +1,8 @@
 ﻿var app = angular.module("myApp", ["ngRoute", "ui.bootstrap", "ngSanitize", "ui.select", "angular.filter"]);
 
 //Constant
-var vHostURL = 'http://5.79.102.57:8085/';
+var vHostURL = 'http://5.79.102.57:8085/'; //Prod
+//var vHostURL = 'http://localhost:53492/'; //Local
 var vPageSizeGlobal = 5;
 var vPageSizeSales = 20;
 var vTotalSizeGlobal = 1000;

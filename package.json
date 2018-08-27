@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/DepKey/DepKey-Financial-FrontEnd#readme",
   "devDependencies": {
+    "eslint": "^5.4.0",
+    "eslint-config-google": "^0.9.1",
     "lite-server": "^2.4.0"
   }
 }
